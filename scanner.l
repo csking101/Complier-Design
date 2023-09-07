@@ -247,7 +247,7 @@ struct hash
 
 
 /*
-void insertToHash(char *token, char *attr)
+void insertToHashLinearProbing(char *token, char *attr)
 {
 	int flag=0;
 	int hi;
@@ -344,11 +344,11 @@ int main()
 			switch (scan) {
 				case AUTO ... WHILE:
 					printf("%s\t\t\tKEYWORD\t\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "KEYWORD");
+					insertToHashLinearProbing(st, yytext, "KEYWORD");
 					break;
 				case IDENTIFIER:
 					printf("%s\t\t\tIDENTIFIER\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "IDENTIFIER");
+					insertToHashLinearProbing(st, yytext, "IDENTIFIER");
 					break;
 				case MLCS:
 					printf("%s\t\t\tMultiline Comment Start\t\tLine %d\n", yytext, lineNumber);
@@ -359,19 +359,19 @@ int main()
 					break;
 				case LEQ ... DECR:
 					printf("%s\t\t\tOPERATOR\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "OPERATOR");
+					insertToHashLinearProbing(st, yytext, "OPERATOR");
 					break;
 				case COMMA:
 				case SEMI:
 				case OBO ... HASH:
 					printf("%s\t\t\tSPECIAL SYMBOL\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "SPECIAL SYMBOL");
+					insertToHashLinearProbing(st, yytext, "SPECIAL SYMBOL");
 					break;
 				case DQ:
 					printf("%s\t\t\tSPECIAL SYMBOL\t\t\tLine %d\n", yytext, lineNumber);
 					doubleQuote++;
 					doubleQuoteLine = lineNumber;
-					insertToHash(st, yytext, "SPECIAL SYMBOL");
+					insertToHashLinearProbing(st, yytext, "SPECIAL SYMBOL");
 					break;
 				case HEADER:
 				case STRINGH:
@@ -380,39 +380,39 @@ int main()
 					break;
 				case MAIN:
 					printf("%s\t\t\tMAIN FUNCTION\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "IDENTIFIER");
+					insertToHashLinearProbing(st, yytext, "IDENTIFIER");
 					break;
 				case PRINTF:
 				case SCANF:
 					printf("%s\t\t\tPRE DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "PRE DEFINED FUNCTION");
+					insertToHashLinearProbing(st, yytext, "PRE DEFINED FUNCTION");
 					break;
 				case GETCH ... STRCPY:
 				case CEIL ... EXP:
 					printf("%s\t\t\tLIBRARRY DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "LIBRARRY DEFINED FUNCTION");
+					insertToHashLinearProbing(st, yytext, "LIBRARRY DEFINED FUNCTION");
 					break;
 				case DEFINE:
 					printf("%s\t\t\tPRE PROCESSOR DIRECTIVE\t\tLine %d\n", yytext, lineNumber);
 					break;
 				case INT_CONST:
 					printf("%s\t\t\tINTEGER CONSTANT\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "INTEGER CONSTANT");
+					insertToHashLinearProbing(st, yytext, "INTEGER CONSTANT");
 					break;
 				case FLOAT_CONST:
 					printf("%s\t\t\tFLOATING POINT CONSTANT\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "FLOATING POINT CONSTANT");
+					insertToHashLinearProbing(st, yytext, "FLOATING POINT CONSTANT");
 					break;
 				case TYPE_SPEC:
 					printf("%s\t\t\tTYPE SPECIFIER\t\t\tLine %d\n", yytext, lineNumber);
 					break;
 				case ARR:
 					printf("%s\t\t\tARRAY\t\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "ARRAY");
+					insertToHashLinearProbing(st, yytext, "ARRAY");
 					break;
 				case FUNC:
 					printf("%s\t\t\tUSER DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "USER DEFINED FUNCTION");
+					insertToHashLinearProbing(st, yytext, "USER DEFINED FUNCTION");
 					break;
 				case NUM_ERR:
 					printf("\n******** ERROR!! CONSTANT ERROR %s at Line %d ********\n\n", yytext, lineNumber);
@@ -422,15 +422,15 @@ int main()
 					break;
 				case CHAR_CONST:
 					printf("%s\t\t\tCHARACTER CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "CHARACTER CONSTANT");
+					insertToHashLinearProbing(st, yytext, "CHARACTER CONSTANT");
 					break;
 				case SIGNED_CONST:
 					printf("%s\t\t\tSIGNED CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "SIGNED CONSTANT");
+					insertToHashLinearProbing(st, yytext, "SIGNED CONSTANT");
 					break;
 				case STRING_CONST:
 					printf("%s\t\t\tSTRING CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(st, yytext, "STRING CONSTANT");
+					insertToHashLinearProbing(st, yytext, "STRING CONSTANT");
 					break;
 				default:
 					printf("\n******** ERROR!! TOKEN NOT SUPPORTED BY COMPILER %s at Line %d ********\n\n", yytext, lineNumber);		

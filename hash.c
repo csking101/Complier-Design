@@ -57,12 +57,38 @@ void insertToHash(SymbolTable* table, const char* name, const char* attr){
 	//Insertion by adding to the start of the linked list(Bucket)
 	Bucket* newBucket = malloc(sizeof(Bucket));
 	newBucket->data = newToken;
-	newBucket->next = table->tablePtr[index];
+	newBucket->next = (Bucket*) table->tablePtr[index];
 
 	table->tablePtr[index] = newBucket;
 
 	printf("Inserted Token with name \"%s\"\n",name);
 }
+
+void insertToHashLinearProbing(SymbolTable* table, const char* name, const char* attr){
+	int index = Hash(name, table->size);
+
+	Token newToken;
+	strcpy(newToken.name, name);
+	strcpy(newToken.attr, attr);
+
+	Bucket* newBucket = malloc(sizeof(Bucket));
+	newBucket->data = newToken;
+	
+	int candidate_index = index;
+
+	while (table->tablePtr[candidate_index] != NULL){
+		candidate_index = (candidate_index + 1) % table->size;
+		if (candidate_index == index) break;
+	}
+
+	newBucket->next = (Bucket*) table->tablePtr[candidate_index];
+
+	table->tablePtr[candidate_index] = newBucket;
+
+	printf("Inserted Token with name \"%s\" with Linear Probing \n",name);
+
+}
+
 
 int lookupSymbol(SymbolTable* table, const char* name){
 	int index = Hash(name, table->size);
@@ -72,7 +98,34 @@ int lookupSymbol(SymbolTable* table, const char* name){
 	while (current != NULL){
 		if (strcmp(current->data.name, name) == 0) return 1;
 	
-		current = current->next;
+		current = (Bucket*) current->next;
+	}
+
+	return 0;
+}
+
+int lookupSymbolLinearProbing(SymbolTable* table, const char* name){
+	int index = Hash(name, table->size);
+
+	int original_hash_index = index;
+
+	Bucket* current = table->tablePtr[index];
+
+	while (table->tablePtr[index] != NULL){
+		Bucket* temp = table->tablePtr[index];
+
+		while (temp != NULL && strcmp(temp->data.name, name) != 0){
+			temp = (Bucket*) temp->next;
+		}
+
+		if (strcmp(temp->data.name, name) == 0){
+			printf("Token with name \"%s\" found",name);
+			return 1;
+		}
+
+		index = (index + 1) % table->size;
+
+		if (index == original_hash_index) break;
 	}
 
 	return 0;
@@ -85,7 +138,7 @@ void destroySymbolTable(SymbolTable* table){
 
 		while (current != NULL){
 			Bucket* temp = current;
-			current = current->next;
+			current = (Bucket*) current->next;
 
 			free(temp);
 		}
@@ -103,7 +156,7 @@ void printSymbolTable(SymbolTable* table){
 
 		while (current != NULL){
 			printf("{\"%s\",\"%s\"} -> ",current->data.name,current->data.attr);
-			current = current->next;
+			current = (Bucket*) current->next;
 		}
 		printf("\n");
 	}
