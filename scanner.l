@@ -70,6 +70,10 @@ enum TOKEN {
 
 	PRINTF,
 	SCANF,
+	MALLOC,
+	CALLOC,
+	REALLOC,
+	FREE,
 	DEFINE,
 
 
@@ -111,7 +115,7 @@ enum TOKEN {
 	LOG,
 	SQRT,
 	POW,
-	EXP
+	EXP,
 };
 %}
 
@@ -166,6 +170,10 @@ while return WHILE;
 
 printf return PRINTF;
 scanf return SCANF;
+malloc\([^)]*\) return MALLOC;
+calloc\([^)]*\) return CALLOC;
+realloc\([^)]*\) return REALLOC;
+free\([^)]*\) return FREE;
 
 getch return GETCH;
 strlen return STRLEN;
@@ -212,6 +220,8 @@ exp return EXP;
 
 "#include<stdio.h>" return HEADER;
 "#include <stdio.h>" return HEADER;
+"#include<stdlib.h>" return HEADER;
+"#include <stdlib.h>" return HEADER;
 "#include<string.h>" return STRINGH;
 "#include <string.h>" return STRINGH;
 "#include<math.h>" return MATH;
@@ -222,7 +232,7 @@ exp return EXP;
 ({digit}+)\.({digit}+) return FLOAT_CONST;
 
 "%d"|"%f"|"%u"|"%s" return TYPE_SPEC;
-"\"" return DQ;
+"" return DQ;
 "(" return OBO;
 ")" return OBC;
 "{" return CBO;
@@ -342,8 +352,7 @@ int main(int argc, char *argv[])
 					printf("%s\t\t\tMAIN FUNCTION\t\t\tLine %d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "IDENTIFIER");
 					break;
-				case PRINTF:
-				case SCANF:
+				case PRINTF ... FREE:
 					printf("%s\t\t\tPRE DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "PRE DEFINED FUNCTION");
 					break;
