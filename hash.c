@@ -61,7 +61,7 @@ void insertToHash(SymbolTable* table, const char* name, const char* attr){
 
 	table->tablePtr[index] = newBucket;
 
-	printf("Inserted Token with name \"%s\"\n",name);
+	// printf("Inserted Token with name \"%s\"\n",name);
 }
 
 void insertToHashLinearProbing(SymbolTable* table, const char* name, const char* attr){
@@ -112,7 +112,7 @@ void insertToHashQuadraticProbing(SymbolTable* table, const char* name, const ch
 	
 	table->tablePtr[candidate_index] = newBucket;
 
-	printf("Inserted Token with name \"%s\" with Quadratic Probing \n", name);
+	// printf("Inserted Token with name \"%s\" with Quadratic Probing \n", name);
 
 }
 
