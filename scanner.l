@@ -1,0 +1,474 @@
+%{
+int lineNumber = 1;
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<math.h>
+
+enum TOKEN {
+	AUTO = 1,
+	BREAK,
+	CASE,
+	CHAR,
+	CONST,
+	CONTINUE,
+	DEFAULT,
+	DO,
+	DOUBLE,
+	ELSE,
+	ENUM,
+	EXTERN,
+	FLOAT,
+	FOR,
+	GOTO,
+	IF,
+	INT,
+	LONG,
+	REGISTER,
+	RETURN,
+	SHORT,
+	SIGNED,
+	SIZEOF,
+	STATIC,
+	STRUCT,
+	SWITCH,
+	TYPEDEF,
+	UNION,
+	UNSIGNED,
+	VOID,
+	VOLATILE,
+	WHILE,
+
+	IDENTIFIER,
+	SLC,
+	MLCS,
+	MLCE,
+
+	LEQ,
+	GEQ,
+	EQEQ,
+	NEQ,
+	LOR,
+	LAND,
+	ASSIGN,
+	PLUS,
+	SUB,
+	MULT,
+	DIV,
+	MOD,
+	LESSER,
+	GREATER,
+	INCR,
+	DECR,
+
+	COMMA,
+	SEMI,
+
+	HEADER,
+	MAIN,
+
+	PRINTF,
+	SCANF,
+	DEFINE,
+
+
+	INT_CONST,
+	FLOAT_CONST,
+
+	TYPE_SPEC,
+
+	DQ,
+
+	OBO,
+	OBC,
+	CBO,
+	CBC,
+	HASH,
+
+	ARR,
+	FUNC,
+
+	NUM_ERR,
+	UNKNOWN,
+
+	CHAR_CONST,
+	SIGNED_CONST,
+	STRING_CONST,
+
+	GETCH,
+	STRLEN,
+	STRCMP,
+	STRCPY,
+	STRINGH,
+	MATH,
+
+	CEIL,
+	FLOOR,
+	FABS,
+	LOG,
+	SQRT,
+	POW,
+	EXP
+};
+%}
+
+alpha [A-Za-z]
+digit [0-9]
+und [_]
+space [ ]
+tab [	]
+line [\n]
+char \'.\'
+at [@]
+string \"(.^([%d]|[%f]|[%s]|[%c]))\"
+
+%%
+{space}* {}
+{tab}* {}
+{string} return STRING_CONST;
+{char} return CHAR_CONST;
+{line} {lineNumber++;}
+auto return AUTO;
+break return BREAK;
+case return CASE;
+char return CHAR;
+const return CONST;
+continue return CONTINUE;
+default return DEFAULT;
+do return DO;
+double return DOUBLE;
+else return ELSE;
+enum return ENUM;
+extern return EXTERN;
+float return FLOAT;
+for return FOR;
+goto return GOTO;
+if return IF;
+int return INT;
+long return LONG;
+register return REGISTER;
+return return RETURN;
+short return SHORT;
+signed return SIGNED;
+sizeof return SIZEOF;
+static return STATIC;
+struct return STRUCT;
+switch return SWITCH;
+typedef return TYPEDEF;
+union return UNION;
+unsigned return UNSIGNED;
+void return VOID;
+volatile return VOLATILE;
+while return WHILE;
+
+printf return PRINTF;
+scanf return SCANF;
+
+getch return GETCH;
+strlen return STRLEN;
+strcpy return STRCPY;
+strcmp return STRCMP;
+
+ceil return CEIL;
+floor return FLOOR;
+fabs return FABS;
+log return LOG;
+sqrt return SQRT;
+pow return POW;
+exp return EXP;
+
+{alpha}({alpha}|{digit}|{und})* return IDENTIFIER;
+
+[+-][0-9]{digit}*(\.{digit}+)? return SIGNED_CONST;
+
+"//" return SLC;
+"/*" return MLCS;
+"*/" return MLCE;
+
+"<=" return LEQ;
+">=" return GEQ;
+"==" return EQEQ;
+"!=" return NEQ;
+"||" return LOR;
+"&&" return LAND;
+"=" return ASSIGN;
+"+" return PLUS;
+"-" return SUB;
+"*" return MULT;
+"/" return DIV;
+"%" return MOD;
+"<" return LESSER;
+">" return GREATER;
+"++" return INCR;
+"--" return DECR;
+
+"," return COMMA;
+";" return SEMI;
+
+"#include<stdio.h>" return HEADER;
+"#include <stdio.h>" return HEADER;
+"#include<string.h>" return STRINGH;
+"#include <string.h>" return STRINGH;
+"#include<math.h>" return MATH;
+"#include <math.h>" return MATH;
+"main()" return MAIN;
+
+{digit}+ return INT_CONST;
+({digit}+)\.({digit}+) return FLOAT_CONST;
+
+"%d"|"%f"|"%u"|"%s" return TYPE_SPEC;
+"\"" return DQ;
+"(" return OBO;
+")" return OBC;
+"{" return CBO;
+"}" return CBC;
+"#" return HASH;
+
+{alpha}({alpha}|{digit}|{und})*\[{digit}*\] return ARR;
+{alpha}({alpha}|{digit}|{und})*\(({alpha}|{digit}|{und}|{space})*\) return FUNC;
+({digit}+)\.({digit}+)\.({digit}|\.)* return NUM_ERR;
+({digit}|{at})+({alpha}|{digit}|{und}|{at})* return UNKNOWN;
+%%
+
+struct node
+{
+	char token[100];
+    	char attr[100];
+	struct node *next;
+};
+
+struct hash
+{
+	struct node *head;
+	int count;
+};
+
+struct hash hashTable[1000];
+int eleCount = 1000;
+
+struct node * createNode(char *token, char *attr)
+{
+	struct node *newnode;
+	newnode = (struct node *) malloc(sizeof(struct node));
+	strcpy(newnode->token, token);
+	strcpy(newnode->attr, attr);
+	newnode->next = NULL;
+	return newnode;
+}
+
+int hashIndex(char *token)
+{
+	int hi=0;
+	int l,i;
+	for(i=0;token[i]!='\0';i++)
+	{
+		hi = hi + (int)token[i];
+	}
+	hi = hi%eleCount;
+	return hi;
+}
+
+void insertToHash(char *token, char *attr)
+{
+	int flag=0;
+	int hi;
+	hi = hashIndex(token);
+	struct node *newnode = createNode(token, attr);
+	/* head of list for the bucket with index "hashIndex" */
+	if (hashTable[hi].head==NULL)
+	{
+		hashTable[hi].head = newnode;
+	        hashTable[hi].count = 1;
+	        return;
+	}
+	struct node *myNode;
+    	myNode = hashTable[hi].head;
+	while (myNode != NULL)
+    	{
+        	if (strcmp(myNode->token, token)==0)
+        	{
+            		flag = 1;
+            		break;
+        	}
+        	myNode = myNode->next;
+    	}
+	if(!flag)
+	{
+		//adding new node to the list
+		newnode->next = (hashTable[hi].head);
+		//update the head of the list and no of nodes in the current bucket
+		hashTable[hi].head = newnode;
+		hashTable[hi].count++;
+	}
+	return;
+}
+
+void display()
+{
+    	struct node *myNode;
+    	int i,j, k=1;
+    	printf("-------------------------------------------------------------------");
+    	printf("\nSNo \t|\tToken \t\t|\tToken Type \t\n");
+        printf("-------------------------------------------------------------------\n");
+    	for (i = 0; i < eleCount; i++)
+    	{
+        	if (hashTable[i].count == 0)
+            		continue;
+        	myNode = hashTable[i].head;
+        	if (!myNode)
+            		continue;
+        	while (myNode != NULL)
+        	{
+            		printf("%d\t\t", k++);
+            		printf("%s\t\t\t", myNode->token);
+            		printf("%s\t\n", myNode->attr);
+            		myNode = myNode->next;
+        	}
+	}
+   	return;
+}
+
+int main()
+{
+	int scan;
+	int singleLineCommentLine = 0; 
+	int isMultiLineComment = 0, multiLineCommentLine = 0;
+	int doubleQuote = 0, doubleQuoteLine = 0;
+	yyin = fopen("test6.c","r");
+	printf("\n\n");
+	scan = yylex();
+	while(scan)
+	{
+		if(lineNumber == singleLineCommentLine)
+		{
+			scan = yylex();
+			continue;
+		}
+
+		if(lineNumber!=doubleQuoteLine && doubleQuoteLine!=0)
+		{
+			if(doubleQuote%2!=0)
+				printf("\n******** ERROR!! INCOMPLETE STRING at Line %d ********\n\n", doubleQuoteLine);
+			doubleQuote=0;
+		}
+
+		if(scan == SLC)
+		{
+			printf("%s\t\t\tSingleline Comment\t\tLine %d\n", yytext, lineNumber);
+			singleLineCommentLine = lineNumber;
+		}
+
+		if(isMultiLineComment == 0){
+			switch (scan) {
+				case AUTO ... WHILE:
+					printf("%s\t\t\tKEYWORD\t\t\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "KEYWORD");
+					break;
+				case IDENTIFIER:
+					printf("%s\t\t\tIDENTIFIER\t\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "IDENTIFIER");
+					break;
+				case MLCS:
+					printf("%s\t\t\tMultiline Comment Start\t\tLine %d\n", yytext, lineNumber);
+					multiLineCommentLine = lineNumber;
+					isMultiLineComment = 1;
+				case MLCE:
+					printf("\n******** ERROR!! UNMATCHED MULTILINE COMMENT END %s at Line %d ********\n\n", yytext, lineNumber);
+					break;
+				case LEQ ... DECR:
+					printf("%s\t\t\tOPERATOR\t\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "OPERATOR");
+					break;
+				case COMMA:
+				case SEMI:
+				case OBO ... HASH:
+					printf("%s\t\t\tSPECIAL SYMBOL\t\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "SPECIAL SYMBOL");
+					break;
+				case DQ:
+					printf("%s\t\t\tSPECIAL SYMBOL\t\t\tLine %d\n", yytext, lineNumber);
+					doubleQuote++;
+					doubleQuoteLine = lineNumber;
+					insertToHash(yytext, "SPECIAL SYMBOL");
+					break;
+				case HEADER:
+				case STRINGH:
+				case MATH:
+					printf("%s\tHEADER\t\t\t\tLine %d\n",yytext, lineNumber);
+					break;
+				case MAIN:
+					printf("%s\t\t\tMAIN FUNCTION\t\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "IDENTIFIER");
+					break;
+				case PRINTF:
+				case SCANF:
+					printf("%s\t\t\tPRE DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "PRE DEFINED FUNCTION");
+					break;
+				case GETCH ... STRCPY:
+				case CEIL ... EXP:
+					printf("%s\t\t\tLIBRARRY DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "LIBRARRY DEFINED FUNCTION");
+					break;
+				case DEFINE:
+					printf("%s\t\t\tPRE PROCESSOR DIRECTIVE\t\tLine %d\n", yytext, lineNumber);
+					break;
+				case INT_CONST:
+					printf("%s\t\t\tINTEGER CONSTANT\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "INTEGER CONSTANT");
+					break;
+				case FLOAT_CONST:
+					printf("%s\t\t\tFLOATING POINT CONSTANT\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "FLOATING POINT CONSTANT");
+					break;
+				case TYPE_SPEC:
+					printf("%s\t\t\tTYPE SPECIFIER\t\t\tLine %d\n", yytext, lineNumber);
+					break;
+				case ARR:
+					printf("%s\t\t\tARRAY\t\t\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "ARRAY");
+					break;
+				case FUNC:
+					printf("%s\t\t\tUSER DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "USER DEFINED FUNCTION");
+					break;
+				case NUM_ERR:
+					printf("\n******** ERROR!! CONSTANT ERROR %s at Line %d ********\n\n", yytext, lineNumber);
+					break;
+				case UNKNOWN:
+					printf("\n******** ERROR!! UNKNOWN TOKEN %s at Line %d ********\n\n", yytext, lineNumber);
+					break;
+				case CHAR_CONST:
+					printf("%s\t\t\tCHARACTER CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "CHARACTER CONSTANT");
+					break;
+				case SIGNED_CONST:
+					printf("%s\t\t\tSIGNED CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "SIGNED CONSTANT");
+					break;
+				case STRING_CONST:
+					printf("%s\t\t\tSTRING CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
+					insertToHash(yytext, "STRING CONSTANT");
+					break;
+				default:
+					printf("\n******** ERROR!! TOKEN NOT SUPPORTED BY COMPILER %s at Line %d ********\n\n", yytext, lineNumber);		
+			}
+		}
+		if (scan == MLCE && isMultiLineComment == 1) {
+			isMultiLineComment = 0;
+			printf("%s\t\t\tMultiline Comment End\t\tLine %d\n", yytext, lineNumber);
+		}
+		
+		scan = yylex();
+	}
+	if(isMultiLineComment == 1)
+		printf("\n******** ERROR!! UNMATCHED COMMENT STARTING at Line %d ********\n\n",multiLineCommentLine);
+	printf("\n");
+	printf("\n\t******** SYMBOL TABLE ********\t\t\n");
+	display();
+        printf("-------------------------------------------------------------------\n\n");
+}
+int yywrap()
+{
+	return 1;
+}
