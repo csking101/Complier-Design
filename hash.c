@@ -57,7 +57,7 @@ void insertToHash(SymbolTable* table, const char* name, const char* attr){
 	//Insertion by adding to the start of the linked list(Bucket)
 	Bucket* newBucket = malloc(sizeof(Bucket));
 	newBucket->data = newToken;
-	newBucket->next = (Bucket*) table->tablePtr[index];
+	newBucket->next = (Token*) table->tablePtr[index];
 
 	table->tablePtr[index] = newBucket;
 
@@ -81,7 +81,7 @@ void insertToHashLinearProbing(SymbolTable* table, const char* name, const char*
 		if (candidate_index == index) break;
 	}
 
-	newBucket->next = (Bucket*) table->tablePtr[candidate_index];
+	newBucket->next = (Token*) table->tablePtr[candidate_index];
 
 	table->tablePtr[candidate_index] = newBucket;
 
