@@ -61,7 +61,6 @@ void insertToHash(SymbolTable* table, const char* name, const char* attr){
 
 	table->tablePtr[index] = newBucket;
 
-	// printf("Inserted Token with name \"%s\"\n",name);
 }
 
 void insertToHashLinearProbing(SymbolTable* table, const char* name, const char* attr){
@@ -112,7 +111,6 @@ void insertToHashQuadraticProbing(SymbolTable* table, const char* name, const ch
 	
 	table->tablePtr[candidate_index] = newBucket;
 
-	// printf("Inserted Token with name \"%s\" with Quadratic Probing \n", name);
 
 }
 
@@ -218,22 +216,3 @@ void printSymbolTable(SymbolTable* table){
 	}
 	printf("\n");
 }
-
-
-// int main(){
-// 	SymbolTable* st = createSymbolTable(SYMBOL_TABLE_SIZE);
-
-// 	insertSymbol(st,"int", "KEYWORD");
-// 	insertSymbol(st,"main", "IDENTIFIER");
-// 	insertSymbol(st,"{","OPEN-BRACKET");
-// 	insertSymbol(st,"printf", "PRE-DEFINED FUNCTION");
-// 	insertSymbol(st,"\"Hello World! \\n\"", "STRING");
-// 	insertSymbol(st,";", "LINE-TERMINATOR");
-// 	insertSymbol(st,"}","CLOSE-BRACKET");
-
-// 	printf("\n");
-
-// 	printSymbolTable(st);
-
-// 	destroySymbolTable(st);
-// }
