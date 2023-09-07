@@ -123,7 +123,7 @@ tab [	]
 line [\n]
 char \'.\'
 at [@]
-string \"(\\[nt\"'\\]|%[fdsct]|[^\n\"])*\"
+string \"(\\[nt\"'\\]|[^\n\"])*\"
 
 %%
 {space}* {}

@@ -24,7 +24,7 @@ void printFib(int n)
 {
 	// when the number of terms is less than 1
 	if (n < 1) {
-		printf("Invalid number of terms\n");
+		printf("Invalid number of \t terms %llu %lld %o %x %lli %li %% \n");
 	}
 	// when the number of terms is 1
 	else if (n == 1) {
