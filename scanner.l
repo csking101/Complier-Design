@@ -4,6 +4,7 @@ int lineNumber = 1;
 #include<stdlib.h>
 #include<string.h>
 #include<math.h>
+#include"hash.h"
 
 enum TOKEN {
 	AUTO = 1,
@@ -243,38 +244,15 @@ struct hash
 	int count;
 };
 
-struct hash hashTable[1000];
-int eleCount = 1000;
 
-struct node * createNode(char *token, char *attr)
-{
-	struct node *newnode;
-	newnode = (struct node *) malloc(sizeof(struct node));
-	strcpy(newnode->token, token);
-	strcpy(newnode->attr, attr);
-	newnode->next = NULL;
-	return newnode;
-}
 
-int hashIndex(char *token)
-{
-	int hi=0;
-	int l,i;
-	for(i=0;token[i]!='\0';i++)
-	{
-		hi = hi + (int)token[i];
-	}
-	hi = hi%eleCount;
-	return hi;
-}
-
+/*
 void insertToHash(char *token, char *attr)
 {
 	int flag=0;
 	int hi;
 	hi = hashIndex(token);
 	struct node *newnode = createNode(token, attr);
-	/* head of list for the bucket with index "hashIndex" */
 	if (hashTable[hi].head==NULL)
 	{
 		hashTable[hi].head = newnode;
@@ -302,7 +280,8 @@ void insertToHash(char *token, char *attr)
 	}
 	return;
 }
-
+*/
+/*
 void display()
 {
     	struct node *myNode;
@@ -327,14 +306,17 @@ void display()
 	}
    	return;
 }
+*/
 
 int main()
 {
+	SymbolTable* st = createSymbolTable(SYMBOL_TABLE_SIZE);
+	
 	int scan;
 	int singleLineCommentLine = 0; 
 	int isMultiLineComment = 0, multiLineCommentLine = 0;
 	int doubleQuote = 0, doubleQuoteLine = 0;
-	yyin = fopen("test6.c","r");
+	yyin = fopen("test69.c","r");
 	printf("\n\n");
 	scan = yylex();
 	while(scan)
@@ -362,11 +344,11 @@ int main()
 			switch (scan) {
 				case AUTO ... WHILE:
 					printf("%s\t\t\tKEYWORD\t\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "KEYWORD");
+					insertToHash(st, yytext, "KEYWORD");
 					break;
 				case IDENTIFIER:
 					printf("%s\t\t\tIDENTIFIER\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "IDENTIFIER");
+					insertToHash(st, yytext, "IDENTIFIER");
 					break;
 				case MLCS:
 					printf("%s\t\t\tMultiline Comment Start\t\tLine %d\n", yytext, lineNumber);
@@ -377,19 +359,19 @@ int main()
 					break;
 				case LEQ ... DECR:
 					printf("%s\t\t\tOPERATOR\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "OPERATOR");
+					insertToHash(st, yytext, "OPERATOR");
 					break;
 				case COMMA:
 				case SEMI:
 				case OBO ... HASH:
 					printf("%s\t\t\tSPECIAL SYMBOL\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "SPECIAL SYMBOL");
+					insertToHash(st, yytext, "SPECIAL SYMBOL");
 					break;
 				case DQ:
 					printf("%s\t\t\tSPECIAL SYMBOL\t\t\tLine %d\n", yytext, lineNumber);
 					doubleQuote++;
 					doubleQuoteLine = lineNumber;
-					insertToHash(yytext, "SPECIAL SYMBOL");
+					insertToHash(st, yytext, "SPECIAL SYMBOL");
 					break;
 				case HEADER:
 				case STRINGH:
@@ -398,39 +380,39 @@ int main()
 					break;
 				case MAIN:
 					printf("%s\t\t\tMAIN FUNCTION\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "IDENTIFIER");
+					insertToHash(st, yytext, "IDENTIFIER");
 					break;
 				case PRINTF:
 				case SCANF:
 					printf("%s\t\t\tPRE DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "PRE DEFINED FUNCTION");
+					insertToHash(st, yytext, "PRE DEFINED FUNCTION");
 					break;
 				case GETCH ... STRCPY:
 				case CEIL ... EXP:
 					printf("%s\t\t\tLIBRARRY DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "LIBRARRY DEFINED FUNCTION");
+					insertToHash(st, yytext, "LIBRARRY DEFINED FUNCTION");
 					break;
 				case DEFINE:
 					printf("%s\t\t\tPRE PROCESSOR DIRECTIVE\t\tLine %d\n", yytext, lineNumber);
 					break;
 				case INT_CONST:
 					printf("%s\t\t\tINTEGER CONSTANT\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "INTEGER CONSTANT");
+					insertToHash(st, yytext, "INTEGER CONSTANT");
 					break;
 				case FLOAT_CONST:
 					printf("%s\t\t\tFLOATING POINT CONSTANT\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "FLOATING POINT CONSTANT");
+					insertToHash(st, yytext, "FLOATING POINT CONSTANT");
 					break;
 				case TYPE_SPEC:
 					printf("%s\t\t\tTYPE SPECIFIER\t\t\tLine %d\n", yytext, lineNumber);
 					break;
 				case ARR:
 					printf("%s\t\t\tARRAY\t\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "ARRAY");
+					insertToHash(st, yytext, "ARRAY");
 					break;
 				case FUNC:
 					printf("%s\t\t\tUSER DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "USER DEFINED FUNCTION");
+					insertToHash(st, yytext, "USER DEFINED FUNCTION");
 					break;
 				case NUM_ERR:
 					printf("\n******** ERROR!! CONSTANT ERROR %s at Line %d ********\n\n", yytext, lineNumber);
@@ -440,15 +422,15 @@ int main()
 					break;
 				case CHAR_CONST:
 					printf("%s\t\t\tCHARACTER CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "CHARACTER CONSTANT");
+					insertToHash(st, yytext, "CHARACTER CONSTANT");
 					break;
 				case SIGNED_CONST:
 					printf("%s\t\t\tSIGNED CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "SIGNED CONSTANT");
+					insertToHash(st, yytext, "SIGNED CONSTANT");
 					break;
 				case STRING_CONST:
 					printf("%s\t\t\tSTRING CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHash(yytext, "STRING CONSTANT");
+					insertToHash(st, yytext, "STRING CONSTANT");
 					break;
 				default:
 					printf("\n******** ERROR!! TOKEN NOT SUPPORTED BY COMPILER %s at Line %d ********\n\n", yytext, lineNumber);		
@@ -465,8 +447,10 @@ int main()
 		printf("\n******** ERROR!! UNMATCHED COMMENT STARTING at Line %d ********\n\n",multiLineCommentLine);
 	printf("\n");
 	printf("\n\t******** SYMBOL TABLE ********\t\t\n");
-	display();
+	// display();
         printf("-------------------------------------------------------------------\n\n");
+	printSymbolTable(st);
+	destroySymbolTable(st);
 }
 int yywrap()
 {

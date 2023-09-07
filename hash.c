@@ -47,7 +47,7 @@ SymbolTable* createSymbolTable(int size){
 	return table;
 }
 
-void insertSymbol(SymbolTable* table, const char* name, const char* attr){
+void insertToHash(SymbolTable* table, const char* name, const char* attr){
 	int index = Hash(name, table->size);
 
 	Token newToken;
@@ -111,20 +111,20 @@ void printSymbolTable(SymbolTable* table){
 }
 
 
-int main(){
-	SymbolTable* st = createSymbolTable(SYMBOL_TABLE_SIZE);
+// int main(){
+// 	SymbolTable* st = createSymbolTable(SYMBOL_TABLE_SIZE);
 
-	insertSymbol(st,"int", "KEYWORD");
-	insertSymbol(st,"main", "IDENTIFIER");
-	insertSymbol(st,"{","OPEN-BRACKET");
-	insertSymbol(st,"printf", "PRE-DEFINED FUNCTION");
-	insertSymbol(st,"\"Hello World! \\n\"", "STRING");
-	insertSymbol(st,";", "LINE-TERMINATOR");
-	insertSymbol(st,"}","CLOSE-BRACKET");
+// 	insertSymbol(st,"int", "KEYWORD");
+// 	insertSymbol(st,"main", "IDENTIFIER");
+// 	insertSymbol(st,"{","OPEN-BRACKET");
+// 	insertSymbol(st,"printf", "PRE-DEFINED FUNCTION");
+// 	insertSymbol(st,"\"Hello World! \\n\"", "STRING");
+// 	insertSymbol(st,";", "LINE-TERMINATOR");
+// 	insertSymbol(st,"}","CLOSE-BRACKET");
 
-	printf("\n");
+// 	printf("\n");
 
-	printSymbolTable(st);
+// 	printSymbolTable(st);
 
-	destroySymbolTable(st);
-}
+// 	destroySymbolTable(st);
+// }
