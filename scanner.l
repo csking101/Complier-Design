@@ -99,6 +99,7 @@ enum TOKEN {
 	GETCH,
 	STRLEN,
 	STRCMP,
+	STRCAT,
 	STRCPY,
 	STRINGH,
 	MATH,
@@ -113,9 +114,9 @@ enum TOKEN {
 };
 %}
 
-alpha [A-Za-z]
+alphabet [A-Za-z]
 digit [0-9]
-und [_]
+underscore [_]
 space [ ]
 tab [	]
 line [\n]
@@ -167,8 +168,9 @@ scanf return SCANF;
 
 getch return GETCH;
 strlen return STRLEN;
-strcpy return STRCPY;
 strcmp return STRCMP;
+strcat return STRCAT;
+strcpy return STRCPY;
 
 ceil return CEIL;
 floor return FLOOR;
@@ -178,7 +180,7 @@ sqrt return SQRT;
 pow return POW;
 exp return EXP;
 
-{alpha}({alpha}|{digit}|{und})* return IDENTIFIER;
+{alphabet}({alphabet}|{digit}|{underscore})* return IDENTIFIER;
 
 [+-][0-9]{digit}*(\.{digit}+)? return SIGNED_CONST;
 
@@ -225,62 +227,12 @@ exp return EXP;
 "}" return CBC;
 "#" return HASH;
 
-{alpha}({alpha}|{digit}|{und})*\[{digit}*\] return ARR;
-{alpha}({alpha}|{digit}|{und})*\(({alpha}|{digit}|{und}|{space})*\) return FUNC;
+{alphabet}({alphabet}|{digit}|{underscore})*\[{digit}*\] return ARR;
+{alphabet}({alphabet}|{digit}|{underscore})*\(({alphabet}|{digit}|{underscore}|{space})*\) return FUNC;
 ({digit}+)\.({digit}+)\.({digit}|\.)* return NUM_ERR;
-({digit}|{at})+({alpha}|{digit}|{und}|{at})* return UNKNOWN;
+({digit}|{at})+({alphabet}|{digit}|{underscore}|{at})* return UNKNOWN;
 %%
 
-struct node
-{
-	char token[100];
-    	char attr[100];
-	struct node *next;
-};
-
-struct hash
-{
-	struct node *head;
-	int count;
-};
-
-
-
-/*
-void insertToHash(char *token, char *attr)
-{
-	int flag=0;
-	int hi;
-	hi = hashIndex(token);
-	struct node *newnode = createNode(token, attr);
-	if (hashTable[hi].head==NULL)
-	{
-		hashTable[hi].head = newnode;
-	        hashTable[hi].count = 1;
-	        return;
-	}
-	struct node *myNode;
-    	myNode = hashTable[hi].head;
-	while (myNode != NULL)
-    	{
-        	if (strcmp(myNode->token, token)==0)
-        	{
-            		flag = 1;
-            		break;
-        	}
-        	myNode = myNode->next;
-    	}
-	if(!flag)
-	{
-		//adding new node to the list
-		newnode->next = (hashTable[hi].head);
-		//update the head of the list and no of nodes in the current bucket
-		hashTable[hi].head = newnode;
-		hashTable[hi].count++;
-	}
-	return;
-}
-*/
 /*
 void display()
 {
@@ -308,15 +260,19 @@ void display()
 }
 */
 
-int main()
+int main(int argc, char *argv[])
 {
+	if(argc == 1){
+		printf("Please give input file name");
+		return 0;
+	}
 	SymbolTable* st = createSymbolTable(SYMBOL_TABLE_SIZE);
 	
 	int scan;
 	int singleLineCommentLine = 0; 
 	int isMultiLineComment = 0, multiLineCommentLine = 0;
 	int doubleQuote = 0, doubleQuoteLine = 0;
-	yyin = fopen("test69.c","r");
+	yyin = fopen(argv[argc - 1],"r");
 	printf("\n\n");
 	scan = yylex();
 	while(scan)
@@ -349,6 +305,10 @@ int main()
 				case IDENTIFIER:
 					printf("%s\t\t\tIDENTIFIER\t\t\tLine %d\n", yytext, lineNumber);
 					insertToHash(st, yytext, "IDENTIFIER");
+					break;
+				case SLC:
+					printf("%s\t\t\tSingleline Comment\t\tLine %d\n", yytext, lineNumber);
+					singleLineCommentLine = lineNumber;
 					break;
 				case MLCS:
 					printf("%s\t\t\tMultiline Comment Start\t\tLine %d\n", yytext, lineNumber);
@@ -449,7 +409,7 @@ int main()
 	printf("\n\t******** SYMBOL TABLE ********\t\t\n");
 	// display();
         printf("-------------------------------------------------------------------\n\n");
-	printSymbolTable(st);
+	// printSymbolTable(st);
 	destroySymbolTable(st);
 }
 int yywrap()
