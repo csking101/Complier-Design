@@ -123,7 +123,7 @@ tab [	]
 line [\n]
 char \'.\'
 at [@]
-string \"(.^([%d]|[%f]|[%s]|[%c]))\"
+string \"(\\[nt\"'\\]|%[fdsct]|[^\n\"])*\"
 
 %%
 {space}* {}
@@ -182,7 +182,7 @@ sqrt return SQRT;
 pow return POW;
 exp return EXP;
 
-{alphabet}({alphabet}|{digit}|{underscore})* return IDENTIFIER;
+({alphabet}|{underscore})({alphabet}|{digit}|{underscore})* return IDENTIFIER;
 
 [+-][0-9]{digit}*(\.{digit}+)? return SIGNED_CONST;
 
@@ -299,8 +299,12 @@ int main(int argc, char *argv[])
 					insertToHashQuadraticProbing(st, yytext, "KEYWORD");
 					break;
 				case IDENTIFIER:
+					if (yyleng > 31) {
+        				printf("\n******** ERROR!! Identifier '%s' is longer than 31 characters at Line %d ********\n\n", yytext, lineNumber);
+            		}else{
 					printf("%s\t\t\tIDENTIFIER\t\t\tLine %d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "IDENTIFIER");
+					}
 					break;
 				case SLC:
 					printf("%s\t\t\tSingleline Comment\t\tLine %d\n", yytext, lineNumber);
