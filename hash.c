@@ -103,7 +103,7 @@ void insertToHashQuadraticProbing(SymbolTable* table, const char* name, const ch
 	int k = 1;
 
 	while (table->tablePtr[candidate_index] != NULL){
-		candidate_index = (candidate_index + k*k) % table->size;
+		candidate_index = (index + k*k) % table->size;
 		k++;
 		if (candidate_index == index) break;
 	}
@@ -157,6 +157,34 @@ int lookupSymbolLinearProbing(SymbolTable* table, const char* name){
 
 	return 0;
 }
+
+int lookupSymbolQuadraticProbing(SymbolTable* table, const char* name){
+	int index = Hash(name, table->size);
+
+	int original_hash_index = index;
+
+	Bucket* current = table->tablePtr[index];
+	int k = 0;
+	while (table->tablePtr[index] != NULL){
+		Bucket* temp = table->tablePtr[index];
+
+		while (temp != NULL && strcmp(temp->data.name, name) != 0){
+			temp = (Bucket*) temp->next;
+		}
+
+		if (strcmp(temp->data.name, name) == 0){
+			printf("Token with name \"%s\" found",name);
+			return 1;
+		}
+
+		index = (original_hash_index + k*k) % table->size;
+		k++;
+		if (index == original_hash_index) break;
+	}
+
+	return 0;
+}
+		
 
 //To prevent memory leaks
 void destroySymbolTable(SymbolTable* table){
