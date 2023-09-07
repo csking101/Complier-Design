@@ -247,7 +247,7 @@ struct hash
 
 
 /*
-void insertToHashLinearProbing(char *token, char *attr)
+void insertToHashQuadraticProbing(char *token, char *attr)
 {
 	int flag=0;
 	int hi;
@@ -344,11 +344,11 @@ int main()
 			switch (scan) {
 				case AUTO ... WHILE:
 					printf("%s\t\t\tKEYWORD\t\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "KEYWORD");
+					insertToHashQuadraticProbing(st, yytext, "KEYWORD");
 					break;
 				case IDENTIFIER:
 					printf("%s\t\t\tIDENTIFIER\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "IDENTIFIER");
+					insertToHashQuadraticProbing(st, yytext, "IDENTIFIER");
 					break;
 				case MLCS:
 					printf("%s\t\t\tMultiline Comment Start\t\tLine %d\n", yytext, lineNumber);
@@ -359,19 +359,19 @@ int main()
 					break;
 				case LEQ ... DECR:
 					printf("%s\t\t\tOPERATOR\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "OPERATOR");
+					insertToHashQuadraticProbing(st, yytext, "OPERATOR");
 					break;
 				case COMMA:
 				case SEMI:
 				case OBO ... HASH:
 					printf("%s\t\t\tSPECIAL SYMBOL\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "SPECIAL SYMBOL");
+					insertToHashQuadraticProbing(st, yytext, "SPECIAL SYMBOL");
 					break;
 				case DQ:
 					printf("%s\t\t\tSPECIAL SYMBOL\t\t\tLine %d\n", yytext, lineNumber);
 					doubleQuote++;
 					doubleQuoteLine = lineNumber;
-					insertToHashLinearProbing(st, yytext, "SPECIAL SYMBOL");
+					insertToHashQuadraticProbing(st, yytext, "SPECIAL SYMBOL");
 					break;
 				case HEADER:
 				case STRINGH:
@@ -380,39 +380,39 @@ int main()
 					break;
 				case MAIN:
 					printf("%s\t\t\tMAIN FUNCTION\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "IDENTIFIER");
+					insertToHashQuadraticProbing(st, yytext, "IDENTIFIER");
 					break;
 				case PRINTF:
 				case SCANF:
 					printf("%s\t\t\tPRE DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "PRE DEFINED FUNCTION");
+					insertToHashQuadraticProbing(st, yytext, "PRE DEFINED FUNCTION");
 					break;
 				case GETCH ... STRCPY:
 				case CEIL ... EXP:
 					printf("%s\t\t\tLIBRARRY DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "LIBRARRY DEFINED FUNCTION");
+					insertToHashQuadraticProbing(st, yytext, "LIBRARRY DEFINED FUNCTION");
 					break;
 				case DEFINE:
 					printf("%s\t\t\tPRE PROCESSOR DIRECTIVE\t\tLine %d\n", yytext, lineNumber);
 					break;
 				case INT_CONST:
 					printf("%s\t\t\tINTEGER CONSTANT\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "INTEGER CONSTANT");
+					insertToHashQuadraticProbing(st, yytext, "INTEGER CONSTANT");
 					break;
 				case FLOAT_CONST:
 					printf("%s\t\t\tFLOATING POINT CONSTANT\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "FLOATING POINT CONSTANT");
+					insertToHashQuadraticProbing(st, yytext, "FLOATING POINT CONSTANT");
 					break;
 				case TYPE_SPEC:
 					printf("%s\t\t\tTYPE SPECIFIER\t\t\tLine %d\n", yytext, lineNumber);
 					break;
 				case ARR:
 					printf("%s\t\t\tARRAY\t\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "ARRAY");
+					insertToHashQuadraticProbing(st, yytext, "ARRAY");
 					break;
 				case FUNC:
 					printf("%s\t\t\tUSER DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "USER DEFINED FUNCTION");
+					insertToHashQuadraticProbing(st, yytext, "USER DEFINED FUNCTION");
 					break;
 				case NUM_ERR:
 					printf("\n******** ERROR!! CONSTANT ERROR %s at Line %d ********\n\n", yytext, lineNumber);
@@ -422,15 +422,15 @@ int main()
 					break;
 				case CHAR_CONST:
 					printf("%s\t\t\tCHARACTER CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "CHARACTER CONSTANT");
+					insertToHashQuadraticProbing(st, yytext, "CHARACTER CONSTANT");
 					break;
 				case SIGNED_CONST:
 					printf("%s\t\t\tSIGNED CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "SIGNED CONSTANT");
+					insertToHashQuadraticProbing(st, yytext, "SIGNED CONSTANT");
 					break;
 				case STRING_CONST:
 					printf("%s\t\t\tSTRING CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
-					insertToHashLinearProbing(st, yytext, "STRING CONSTANT");
+					insertToHashQuadraticProbing(st, yytext, "STRING CONSTANT");
 					break;
 				default:
 					printf("\n******** ERROR!! TOKEN NOT SUPPORTED BY COMPILER %s at Line %d ********\n\n", yytext, lineNumber);		

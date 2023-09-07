@@ -89,6 +89,33 @@ void insertToHashLinearProbing(SymbolTable* table, const char* name, const char*
 
 }
 
+void insertToHashQuadraticProbing(SymbolTable* table, const char* name, const char* attr){
+	int index = Hash(name, table->size);
+
+	Token newToken;
+	strcpy(newToken.name, name);
+	strcpy(newToken.attr, attr);
+
+	Bucket* newBucket = malloc(sizeof(Bucket));
+	newBucket->data = newToken;
+
+	int candidate_index = index;
+	int k = 1;
+
+	while (table->tablePtr[candidate_index] != NULL){
+		candidate_index = (candidate_index + k*k) % table->size;
+		k++;
+		if (candidate_index == index) break;
+	}
+
+	newBucket->next = (Token*) table->tablePtr[candidate_index];
+	
+	table->tablePtr[candidate_index] = newBucket;
+
+	printf("Inserted Token with name \"%s\" with Quadratic Probing \n", name);
+
+}
+
 
 int lookupSymbol(SymbolTable* table, const char* name){
 	int index = Hash(name, table->size);
