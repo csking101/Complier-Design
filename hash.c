@@ -205,15 +205,16 @@ void destroySymbolTable(SymbolTable* table){
 }
 
 void printSymbolTable(SymbolTable* table){
-	for (int i = 0;i < table->size;i++){
-		printf("Index %d: ",i);
+	int k=1;
+	printf("-------------------------------------------------------------------");
+    printf("\nSNo \t|\tToken \t\t|\tToken Type \t\n");
+	printf("-------------------------------------------------------------------\n");	for (int i = 0;i < table->size;i++){
+		if(table->tablePtr[i] == NULL) continue;
 		Bucket* current = table->tablePtr[i];
-
 		while (current != NULL){
-			printf("{\"%s\",\"%s\"} -> ",current->data.name,current->data.attr);
+			printf("%d\t\t\"%s\"\t\t\t\"%s\"\n",k++,current->data.name,current->data.attr);
 			current = (Bucket*) current->next;
 		}
-		printf("\n");
 	}
 	printf("\n");
 }
