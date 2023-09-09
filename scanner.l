@@ -295,6 +295,7 @@ int main(int argc, char *argv[])
 					printf("%-50sMultiline Comment Start\tLine %-20d\n", yytext, lineNumber);
 					multiLineCommentLine = lineNumber;
 					isMultiLineComment = 1;
+					break;
 				case MLCE:
 					printf("\n******** ERROR!! UNMATCHED MULTILINE COMMENT END %s at Line %d ********\n\n", yytext, lineNumber);
 					break;
