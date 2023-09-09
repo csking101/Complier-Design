@@ -17,11 +17,11 @@ int main() {
     myPoint.x = 3.0;
     myPoint.y = 4.0;
 
-    printf("Point coordinates: (%.2f, %.2f)\n", myPoint.x, myPoint.y);
+    printf("Coords: (%.2f, %.2f)\n", myPoint.x, myPoint.y);
     coord.x = myPoint.x;
-    printf("X-coordinate from union: %.2f\n", coord.x);
+    printf("X-value: %.2f\n", coord.x);
     coord.y = myPoint.y;
-    printf("Y-coordinate from union: %.2f\n", coord.y);
+    printf("Y-value: %.2f\n", coord.y);
 
     return 0;
 }

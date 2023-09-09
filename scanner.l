@@ -329,7 +329,7 @@ int main(int argc, char *argv[])
 					break;
 				case GETCH ... STRCPY:
 				case CEIL ... EXP:
-					printf("%-50sLIBRARY DEFINED FUNCTION\t\tLine %-20d\n", yytext, lineNumber);
+					printf("%-50sLIBRARY DEFINED FUNCTION\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "LIBRARY DEFINED FUNCTION");
 					break;
 				case DEFINE:
@@ -347,7 +347,7 @@ int main(int argc, char *argv[])
 					printf("%-50sTYPE SPECIFIER\t\t\tLine %-20d\n", yytext, lineNumber);
 					break;
 				case ARR:
-					printf("%-50sARRAY\t\t\tLine %-20d\n", yytext, lineNumber);
+					printf("%-50sARRAY\t\t\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "ARRAY");
 					break;
 				// case FUNC:
