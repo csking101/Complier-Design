@@ -232,7 +232,7 @@ exp return EXP;
 ({digit}+)\.({digit}+) return FLOAT_CONST;
 
 "%d"|"%f"|"%u"|"%s" return TYPE_SPEC;
-"" return DQ;
+"\"" return DQ;
 "(" return OBO;
 ")" return OBC;
 "{" return CBO;

@@ -1,16 +1,9 @@
-// C program to demonstrate whether
-// a number is prime or not using
-// for loop
+// C program to check if number is prime or not
 #include <stdio.h>
 
-// Defining the function
-int primenumber(int number)
-{
+int primenumber(int number){
 	int i;
-	
-	// Condition for checking the
-	// given number is prime or
-	// not
+
 	for (i = 2; i <= number / 2; i++)
 	{
 		if (number % i != 0)
@@ -22,11 +15,8 @@ int primenumber(int number)
 }
 
 /* Driver code
-int main()
-{
+int main(){
 	int num = 7, res = 0;
-	
-	// Calling the function
 	res = primenumber(num);
 	if (res == 0)
 		printf("%d is a prime number", num);
