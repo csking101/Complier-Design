@@ -126,8 +126,9 @@ space [ ]
 tab [	]
 line [\n]
 char \'.\'
-at [@]
+unknowns [@~`$^]
 string \"(\\[nt\"'\\]|[^\n\"])*\"
+identifier ({alphabet}|{underscore})({alphabet}|{digit}|{underscore})*
 
 %%
 {space}* {}
@@ -190,7 +191,7 @@ sqrt return SQRT;
 pow return POW;
 exp return EXP;
 
-({alphabet}|{underscore})({alphabet}|{digit}|{underscore})* return IDENTIFIER;
+{identifier} return IDENTIFIER;
 
 [+-][0-9]{digit}*(\.{digit}+)? return SIGNED_CONST;
 
@@ -218,32 +219,26 @@ exp return EXP;
 "," return COMMA;
 ";" return SEMI;
 
-"#include<stdio.h>" return HEADER;
-"#include <stdio.h>" return HEADER;
-"#include<stdlib.h>" return HEADER;
-"#include <stdlib.h>" return HEADER;
-"#include<string.h>" return STRINGH;
-"#include <string.h>" return STRINGH;
-"#include<math.h>" return MATH;
-"#include <math.h>" return MATH;
+"#include"{space}*"<stdio.h>" return HEADER;
+"#include"{space}*"<string.h>" return STRINGH;
+"#include"{space}*"<math.h>" return MATHH;
 "main()" return MAIN;
 
 {digit}+ return INT_CONST;
 ({digit}+)\.({digit}+) return FLOAT_CONST;
 
-"%d"|"%f"|"%u"|"%s" return TYPE_SPEC;
-"" return DQ;
+"\"" return DQ;
 "(" return OBO;
 ")" return OBC;
 "{" return CBO;
 "}" return CBC;
 "#" return HASH;
 
-{alphabet}({alphabet}|{digit}|{underscore})*\[{digit}*\] return ARR;
-{alphabet}({alphabet}|{digit}|{underscore})*\(({alphabet}|{digit}|{underscore}|{space})*\) return FUNC;
+{identifier}\[({digit}*|{identifier})\] return ARR;
 ({digit}+)\.({digit}+)\.({digit}|\.)* return NUM_ERR;
-({digit}|{at})+({alphabet}|{digit}|{underscore}|{at})* return UNKNOWN;
+({digit}|{unknowns})+({alphabet}|{digit}|{underscore}|{unknowns})* return UNKNOWN;
 %%
+// {alphabet}({alphabet}|{digit}|{underscore})*\(({alphabet}|{digit}|{underscore}|{space})*\) return FUNC;
 
 /*
 void display()
@@ -379,10 +374,10 @@ int main(int argc, char *argv[])
 					printf("%s\t\t\tARRAY\t\t\t\tLine %d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "ARRAY");
 					break;
-				case FUNC:
-					printf("%s\t\t\tUSER DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
-					insertToHashQuadraticProbing(st, yytext, "USER DEFINED FUNCTION");
-					break;
+				// case FUNC:
+				// 	printf("%s\t\t\tUSER DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
+				// 	insertToHashQuadraticProbing(st, yytext, "USER DEFINED FUNCTION");
+				// 	break;
 				case NUM_ERR:
 					printf("\n******** ERROR!! CONSTANT ERROR %s at Line %d ********\n\n", yytext, lineNumber);
 					break;
