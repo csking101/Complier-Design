@@ -221,7 +221,7 @@ exp return EXP;
 
 "#include"{space}*"<stdio.h>" return HEADER;
 "#include"{space}*"<string.h>" return STRINGH;
-"#include"{space}*"<math.h>" return MATHH;
+"#include"{space}*"<math.h>" return MATH;
 "main()" return MAIN;
 
 {digit}+ return INT_CONST;
@@ -238,37 +238,13 @@ exp return EXP;
 ({digit}+)\.({digit}+)\.({digit}|\.)* return NUM_ERR;
 ({digit}|{unknowns})+({alphabet}|{digit}|{underscore}|{unknowns})* return UNKNOWN;
 %%
-// {alphabet}({alphabet}|{digit}|{underscore})*\(({alphabet}|{digit}|{underscore}|{space})*\) return FUNC;
-
-/*
-void display()
-{
-    	struct node *myNode;
-    	int i,j, k=1;
-    	printf("-------------------------------------------------------------------");
-    	printf("\nSNo \t|\tToken \t\t|\tToken Type \t\n");
-        printf("-------------------------------------------------------------------\n");
-    	for (i = 0; i < eleCount; i++)
-    	{
-        	if (hashTable[i].count == 0)
-            		continue;
-        	myNode = hashTable[i].head;
-        	if (!myNode)
-            		continue;
-        	while (myNode != NULL)
-        	{
-            		printf("%d\t\t", k++);
-            		printf("%s\t\t\t", myNode->token);
-            		printf("%s\t\n", myNode->attr);
-            		myNode = myNode->next;
-        	}
-	}
-   	return;
-}
-*/
 
 int main(int argc, char *argv[])
 {
+	printf("\n***********************************Tokens Lexed in Order***********************************\n\n");
+	printf("-------------------------------------------------------------------------------------------\n\n");
+	printf("Token Value\t\t\t\t\t  Token Type \t\t\tLine Number\n");
+	printf("-------------------------------------------------------------------------------------------");
 	if(argc == 1){
 		printf("Please give input file name");
 		return 0;
@@ -300,40 +276,41 @@ int main(int argc, char *argv[])
 		if(isMultiLineComment == 0){
 			switch (scan) {
 				case AUTO ... WHILE:
-					printf("%s\t\t\tKEYWORD\t\t\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sKEYWORD\t\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "KEYWORD");
 					break;
 				case IDENTIFIER:
 					if (yyleng > 31) {
         				printf("\n******** ERROR!! Identifier '%s' is longer than 31 characters at Line %d ********\n\n", yytext, lineNumber);
             		}else{
-					printf("%s\t\t\tIDENTIFIER\t\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sIDENTIFIER\t\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "IDENTIFIER");
 					}
 					break;
 				case SLC:
-					printf("%s\t\t\tSingleline Comment\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sSingleline Comment\t\tLine %-20d\n", yytext, lineNumber);
 					singleLineCommentLine = lineNumber;
 					break;
 				case MLCS:
-					printf("%s\t\t\tMultiline Comment Start\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sMultiline Comment Start\tLine %-20d\n", yytext, lineNumber);
 					multiLineCommentLine = lineNumber;
 					isMultiLineComment = 1;
+					break;
 				case MLCE:
 					printf("\n******** ERROR!! UNMATCHED MULTILINE COMMENT END %s at Line %d ********\n\n", yytext, lineNumber);
 					break;
 				case LEQ ... DECR:
-					printf("%s\t\t\tOPERATOR\t\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sOPERATOR\t\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "OPERATOR");
 					break;
 				case COMMA:
 				case SEMI:
 				case OBO ... HASH:
-					printf("%s\t\t\tSPECIAL SYMBOL\t\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sSPECIAL SYMBOL\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "SPECIAL SYMBOL");
 					break;
 				case DQ:
-					printf("%s\t\t\tSPECIAL SYMBOL\t\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sSPECIAL SYMBOL\t\tLine %-20d\n", yytext, lineNumber);
 					doubleQuote++;
 					doubleQuoteLine = lineNumber;
 					insertToHashQuadraticProbing(st, yytext, "SPECIAL SYMBOL");
@@ -341,41 +318,41 @@ int main(int argc, char *argv[])
 				case HEADER:
 				case STRINGH:
 				case MATH:
-					printf("%s\tHEADER\t\t\t\tLine %d\n",yytext, lineNumber);
+					printf("%-50sHEADER\t\t\tLine %-20d\n",yytext, lineNumber);
 					break;
 				case MAIN:
-					printf("%s\t\t\tMAIN FUNCTION\t\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sMAIN FUNCTION\t\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "IDENTIFIER");
 					break;
 				case PRINTF ... FREE:
-					printf("%s\t\t\tPRE DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sPRE DEFINED FUNCTION\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "PRE DEFINED FUNCTION");
 					break;
 				case GETCH ... STRCPY:
 				case CEIL ... EXP:
-					printf("%s\t\t\tLIBRARY DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sLIBRARY DEFINED FUNCTION\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "LIBRARY DEFINED FUNCTION");
 					break;
 				case DEFINE:
-					printf("%s\t\t\tPRE PROCESSOR DIRECTIVE\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sPRE PROCESSOR DIRECTIVE\t\t\tLine %-20d\n", yytext, lineNumber);
 					break;
 				case INT_CONST:
-					printf("%s\t\t\tINTEGER CONSTANT\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sINTEGER CONSTANT\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "INTEGER CONSTANT");
 					break;
 				case FLOAT_CONST:
-					printf("%s\t\t\tFLOATING POINT CONSTANT\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sFLOATING POINT CONSTANT\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "FLOATING POINT CONSTANT");
 					break;
 				case TYPE_SPEC:
-					printf("%s\t\t\tTYPE SPECIFIER\t\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sTYPE SPECIFIER\t\t\tLine %-20d\n", yytext, lineNumber);
 					break;
 				case ARR:
-					printf("%s\t\t\tARRAY\t\t\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sARRAY\t\t\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "ARRAY");
 					break;
 				// case FUNC:
-				// 	printf("%s\t\t\tUSER DEFINED FUNCTION\t\tLine %d\n", yytext, lineNumber);
+				// 	printf("%-50sUSER DEFINED FUNCTION\t\t\tLine %-20d\n", yytext, lineNumber);
 				// 	insertToHashQuadraticProbing(st, yytext, "USER DEFINED FUNCTION");
 				// 	break;
 				case NUM_ERR:
@@ -385,15 +362,15 @@ int main(int argc, char *argv[])
 					printf("\n******** ERROR!! UNKNOWN TOKEN %s at Line %d ********\n\n", yytext, lineNumber);
 					break;
 				case CHAR_CONST:
-					printf("%s\t\t\tCHARACTER CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sCHARACTER CONSTANT\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "CHARACTER CONSTANT");
 					break;
 				case SIGNED_CONST:
-					printf("%s\t\t\tSIGNED CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sSIGNED CONSTANT\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "SIGNED CONSTANT");
 					break;
 				case STRING_CONST:
-					printf("%s\t\t\tSTRING CONSTANT\t\t\tLine %d\n", yytext, lineNumber);
+					printf("%-50sSTRING CONSTANT\t\tLine %-20d\n", yytext, lineNumber);
 					insertToHashQuadraticProbing(st, yytext, "STRING CONSTANT");
 					break;
 				default:
@@ -402,7 +379,7 @@ int main(int argc, char *argv[])
 		}
 		if (scan == MLCE && isMultiLineComment == 1) {
 			isMultiLineComment = 0;
-			printf("%s\t\t\tMultiline Comment End\t\tLine %d\n", yytext, lineNumber);
+			printf("%-50sMultiline Comment End\t\tLine %-20d\n", yytext, lineNumber);
 		}
 		
 		scan = yylex();
@@ -410,9 +387,8 @@ int main(int argc, char *argv[])
 	if(isMultiLineComment == 1)
 		printf("\n******** ERROR!! UNMATCHED COMMENT STARTING at Line %d ********\n\n",multiLineCommentLine);
 	printf("\n");
-	printf("\n\t******** SYMBOL TABLE ********\t\t\n");
-	// display();
-        printf("-------------------------------------------------------------------\n\n");
+	printf("-------------------------------------------------------------------------------------------\n\n");
+	printf("\n************************* SYMBOL TABLE ****************************\n\n");
 	printSymbolTable(st);
 	destroySymbolTable(st);
 }

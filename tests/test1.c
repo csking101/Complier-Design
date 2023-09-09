@@ -11,10 +11,10 @@ int factorial(int n) {
 
 int main() {
     int num;
-    printf("Enter a non-negative integer: ");
+    printf("Enter a number: ");
     scanf("%d", &num);
     if (num < 0) {
-        printf("Factorial is not defined for negative numbers.\n");
+        printf("Error:Negative number!\n");
     } else {
         int result = factorial(num);
         printf("Factorial of %d is %d\n", num, result);

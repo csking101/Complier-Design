@@ -8,10 +8,10 @@ int main() {
     double logarithm = log(num);
     double floorValue = floor(num);
 
-    printf("Square root of %.2f is %.2f\n", num, squareRoot);
-    printf("%.2f raised to the power of 3 is %.2f\n", num, powerResult);
-    printf("Natural logarithm of %.2f is %.2f\n", num, logarithm);
-    printf("Floor value of %.2f is %.2f\n", num, floorValue);
+    printf("SQRT of %.2f is %.2f\n", num, squareRoot);
+    printf("%.2f ^ 3 is %.2f\n", num, powerResult);
+    printf("Log of %.2f is %.2f\n", num, logarithm);
+    printf("Floor of %.2f is %.2f\n", num, floorValue);
 
     return 0;
 }
