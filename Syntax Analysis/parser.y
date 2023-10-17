@@ -55,11 +55,15 @@
 %right tilde_operator exclamation_operator
 %left increment_operator decrement_operator 
 
+%start program
 
-// %start programcurtype
+
 %%
+program
+			: declaration_list;
+
 declaration_list
-			: declaration D 
+			: declaration D ; 
 
 D
 			: declaration_list
