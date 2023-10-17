@@ -8,15 +8,6 @@ void voidReturningFunc(int a)
     return a;
 }
 
-// struct thisisastruct {
-//     register int bismillah;
-// };
-
-// union thisisaunion {
-//     extern int mashallah;
-//     static const int allahisnotreal;
-// };
-
 enum token {
     qwer=9,
     sdakfgk=23,
