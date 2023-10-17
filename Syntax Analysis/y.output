@@ -20,8 +20,6 @@ State 0 conflicts: 9 shift/reduce
 State 18 conflicts: 9 shift/reduce
 State 87 conflicts: 1 shift/reduce
 State 235 conflicts: 1 shift/reduce
-State 239 conflicts: 2 shift/reduce
-State 248 conflicts: 3 shift/reduce
 
 
 Grammar
@@ -261,8 +259,8 @@ Grammar
 
   159 switch_case: SWITCH '(' identifier ')' '{' case_list '}'
 
-  160 case_list: case_entry
-  161          | case_list case_entry
+  160 case_list: case_entry BREAK ';'
+  161          | case_list case_entry BREAK ';'
 
   162 case_entry: CASE constant ':' statement
   163           | CASE constant SPREAD constant ':' statement
@@ -278,7 +276,7 @@ Terminals, with rules where they appear
     ',' (44) 12 65 97 148 156
     '.' (46) 140
     ':' (58) 162 163 164
-    ';' (59) 8 9 47 82 83 88 89 91 92 93 154
+    ';' (59) 8 9 47 82 83 88 89 91 92 93 154 160 161
     '[' (91) 18 69 139
     ']' (93) 20 21 69 139
     '{' (123) 47 79 95 154 159
@@ -303,7 +301,7 @@ Terminals, with rules where they appear
     WHILE (274) 87 89
     FOR (275) 88
     DO (276) 89
-    BREAK (277) 93
+    BREAK (277) 93 160 161
     ENDIF (278)
     SWITCH (279) 159
     CASE (280) 162 163
@@ -3314,8 +3312,6 @@ State 239
     CASE     shift, and go to state 246
     DEFAULT  shift, and go to state 247
 
-    CASE      [reduce using rule 165 (case_entry)]
-    DEFAULT   [reduce using rule 165 (case_entry)]
     $default  reduce using rule 165 (case_entry)
 
     case_list   go to state 248
@@ -3460,24 +3456,22 @@ State 247
 State 248
 
   159 switch_case: SWITCH '(' identifier ')' '{' case_list • '}'
-  161 case_list: case_list • case_entry
+  161 case_list: case_list • case_entry BREAK ';'
 
     CASE     shift, and go to state 246
     DEFAULT  shift, and go to state 247
     '}'      shift, and go to state 258
 
-    CASE     [reduce using rule 165 (case_entry)]
-    DEFAULT  [reduce using rule 165 (case_entry)]
-    '}'      [reduce using rule 165 (case_entry)]
+    $default  reduce using rule 165 (case_entry)
 
     case_entry  go to state 259
 
 
 State 249
 
-  160 case_list: case_entry •
+  160 case_list: case_entry • BREAK ';'
 
-    $default  reduce using rule 160 (case_list)
+    BREAK  shift, and go to state 260
 
 
 State 250
@@ -3491,18 +3485,18 @@ State 251
 
    96 array_int_declarations: integer_constant • array_int_declarations_breakup
 
-    ','  shift, and go to state 260
+    ','  shift, and go to state 261
 
     $default  reduce using rule 98 (array_int_declarations_breakup)
 
-    array_int_declarations_breakup  go to state 261
+    array_int_declarations_breakup  go to state 262
 
 
 State 252
 
    95 array_initialization: assignment_operator '{' array_int_declarations • '}'
 
-    '}'  shift, and go to state 262
+    '}'  shift, and go to state 263
 
 
 State 253
@@ -3516,7 +3510,7 @@ State 254
 
    88 iterative_statements: FOR '(' expression ';' simple_expression ';' expression • ')'
 
-    ')'  shift, and go to state 263
+    ')'  shift, and go to state 264
 
 
 State 255
@@ -3531,8 +3525,8 @@ State 256
   162 case_entry: CASE constant • ':' statement
   163           | CASE constant • SPREAD constant ':' statement
 
-    SPREAD  shift, and go to state 264
-    ':'     shift, and go to state 265
+    SPREAD  shift, and go to state 265
+    ':'     shift, and go to state 266
 
 
 State 257
@@ -3568,7 +3562,7 @@ State 257
     structure_declaration      go to state 22
     struct_or_union            go to state 97
     storage_classes            go to state 24
-    statement                  go to state 266
+    statement                  go to state 267
     compound_statement         go to state 99
     expression_statment        go to state 100
     conditional_statements     go to state 101
@@ -3599,42 +3593,49 @@ State 258
 
 State 259
 
-  161 case_list: case_list case_entry •
+  161 case_list: case_list case_entry • BREAK ';'
 
-    $default  reduce using rule 161 (case_list)
+    BREAK  shift, and go to state 268
 
 
 State 260
+
+  160 case_list: case_entry BREAK • ';'
+
+    ';'  shift, and go to state 269
+
+
+State 261
 
    97 array_int_declarations_breakup: ',' • array_int_declarations
 
     integer_constant  shift, and go to state 251
 
-    array_int_declarations  go to state 267
+    array_int_declarations  go to state 270
 
 
-State 261
+State 262
 
    96 array_int_declarations: integer_constant array_int_declarations_breakup •
 
     $default  reduce using rule 96 (array_int_declarations)
 
 
-State 262
+State 263
 
    95 array_initialization: assignment_operator '{' array_int_declarations '}' •
 
     $default  reduce using rule 95 (array_initialization)
 
 
-State 263
+State 264
 
    88 iterative_statements: FOR '(' expression ';' simple_expression ';' expression ')' •
 
     $default  reduce using rule 88 (iterative_statements)
 
 
-State 264
+State 265
 
   163 case_entry: CASE constant SPREAD • constant ':' statement
 
@@ -3643,10 +3644,10 @@ State 264
     float_constant      shift, and go to state 90
     character_constant  shift, and go to state 91
 
-    constant  go to state 268
+    constant  go to state 271
 
 
-State 265
+State 266
 
   162 case_entry: CASE constant ':' • statement
 
@@ -3679,7 +3680,7 @@ State 265
     structure_declaration      go to state 22
     struct_or_union            go to state 97
     storage_classes            go to state 24
-    statement                  go to state 269
+    statement                  go to state 272
     compound_statement         go to state 99
     expression_statment        go to state 100
     conditional_statements     go to state 101
@@ -3701,35 +3702,56 @@ State 265
     switch_case                go to state 117
 
 
-State 266
+State 267
 
   164 case_entry: DEFAULT ':' statement •
 
     $default  reduce using rule 164 (case_entry)
 
 
-State 267
+State 268
+
+  161 case_list: case_list case_entry BREAK • ';'
+
+    ';'  shift, and go to state 273
+
+
+State 269
+
+  160 case_list: case_entry BREAK ';' •
+
+    $default  reduce using rule 160 (case_list)
+
+
+State 270
 
    97 array_int_declarations_breakup: ',' array_int_declarations •
 
     $default  reduce using rule 97 (array_int_declarations_breakup)
 
 
-State 268
+State 271
 
   163 case_entry: CASE constant SPREAD constant • ':' statement
 
-    ':'  shift, and go to state 270
+    ':'  shift, and go to state 274
 
 
-State 269
+State 272
 
   162 case_entry: CASE constant ':' statement •
 
     $default  reduce using rule 162 (case_entry)
 
 
-State 270
+State 273
+
+  161 case_list: case_list case_entry BREAK ';' •
+
+    $default  reduce using rule 161 (case_list)
+
+
+State 274
 
   163 case_entry: CASE constant SPREAD constant ':' • statement
 
@@ -3762,7 +3784,7 @@ State 270
     structure_declaration      go to state 22
     struct_or_union            go to state 97
     storage_classes            go to state 24
-    statement                  go to state 271
+    statement                  go to state 275
     compound_statement         go to state 99
     expression_statment        go to state 100
     conditional_statements     go to state 101
@@ -3784,7 +3806,7 @@ State 270
     switch_case                go to state 117
 
 
-State 271
+State 275
 
   163 case_entry: CASE constant SPREAD constant ':' statement •
 

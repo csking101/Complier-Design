@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.5.1.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,8 +31,9 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
 #ifndef YY_YY_Y_TAB_H_INCLUDED
 # define YY_YY_Y_TAB_H_INCLUDED
@@ -44,83 +45,92 @@
 extern int yydebug;
 #endif
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
   {
-    IF = 258,
-    INT = 259,
-    CHAR = 260,
-    FLOAT = 261,
-    DOUBLE = 262,
-    LONG = 263,
-    SHORT = 264,
-    SIGNED = 265,
-    UNSIGNED = 266,
-    CONST = 267,
-    STRUCT = 268,
-    ENUM = 269,
-    UNION = 270,
-    RETURN = 271,
-    MAIN = 272,
-    VOID = 273,
-    WHILE = 274,
-    FOR = 275,
-    DO = 276,
-    BREAK = 277,
-    ENDIF = 278,
-    SWITCH = 279,
-    CASE = 280,
-    DEFAULT = 281,
-    SPREAD = 282,
-    AUTO = 283,
-    STATIC = 284,
-    REGISTER = 285,
-    EXTERN = 286,
-    identifier = 287,
-    integer_constant = 288,
-    string_constant = 289,
-    float_constant = 290,
-    character_constant = 291,
-    ELSE = 292,
-    leftshift_assignment_operator = 293,
-    rightshift_assignment_operator = 294,
-    XOR_assignment_operator = 295,
-    OR_assignment_operator = 296,
-    AND_assignment_operator = 297,
-    modulo_assignment_operator = 298,
-    multiplication_assignment_operator = 299,
-    division_assignment_operator = 300,
-    addition_assignment_operator = 301,
-    subtraction_assignment_operator = 302,
-    assignment_operator = 303,
-    OR_operator = 304,
-    AND_operator = 305,
-    pipe_operator = 306,
-    caret_operator = 307,
-    amp_operator = 308,
-    equality_operator = 309,
-    inequality_operator = 310,
-    lessthan_assignment_operator = 311,
-    lessthan_operator = 312,
-    greaterthan_assignment_operator = 313,
-    greaterthan_operator = 314,
-    leftshift_operator = 315,
-    rightshift_operator = 316,
-    add_operator = 317,
-    subtract_operator = 318,
-    multiplication_operator = 319,
-    division_operator = 320,
-    modulo_operator = 321,
-    SIZEOF = 322,
-    tilde_operator = 323,
-    exclamation_operator = 324,
-    increment_operator = 325,
-    decrement_operator = 326
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    IF = 258,                      /* IF  */
+    INT = 259,                     /* INT  */
+    CHAR = 260,                    /* CHAR  */
+    FLOAT = 261,                   /* FLOAT  */
+    DOUBLE = 262,                  /* DOUBLE  */
+    LONG = 263,                    /* LONG  */
+    SHORT = 264,                   /* SHORT  */
+    SIGNED = 265,                  /* SIGNED  */
+    UNSIGNED = 266,                /* UNSIGNED  */
+    CONST = 267,                   /* CONST  */
+    STRUCT = 268,                  /* STRUCT  */
+    ENUM = 269,                    /* ENUM  */
+    UNION = 270,                   /* UNION  */
+    RETURN = 271,                  /* RETURN  */
+    MAIN = 272,                    /* MAIN  */
+    VOID = 273,                    /* VOID  */
+    WHILE = 274,                   /* WHILE  */
+    FOR = 275,                     /* FOR  */
+    DO = 276,                      /* DO  */
+    BREAK = 277,                   /* BREAK  */
+    ENDIF = 278,                   /* ENDIF  */
+    SWITCH = 279,                  /* SWITCH  */
+    CASE = 280,                    /* CASE  */
+    DEFAULT = 281,                 /* DEFAULT  */
+    SPREAD = 282,                  /* SPREAD  */
+    AUTO = 283,                    /* AUTO  */
+    STATIC = 284,                  /* STATIC  */
+    REGISTER = 285,                /* REGISTER  */
+    EXTERN = 286,                  /* EXTERN  */
+    identifier = 287,              /* identifier  */
+    integer_constant = 288,        /* integer_constant  */
+    string_constant = 289,         /* string_constant  */
+    float_constant = 290,          /* float_constant  */
+    character_constant = 291,      /* character_constant  */
+    ELSE = 292,                    /* ELSE  */
+    leftshift_assignment_operator = 293, /* leftshift_assignment_operator  */
+    rightshift_assignment_operator = 294, /* rightshift_assignment_operator  */
+    XOR_assignment_operator = 295, /* XOR_assignment_operator  */
+    OR_assignment_operator = 296,  /* OR_assignment_operator  */
+    AND_assignment_operator = 297, /* AND_assignment_operator  */
+    modulo_assignment_operator = 298, /* modulo_assignment_operator  */
+    multiplication_assignment_operator = 299, /* multiplication_assignment_operator  */
+    division_assignment_operator = 300, /* division_assignment_operator  */
+    addition_assignment_operator = 301, /* addition_assignment_operator  */
+    subtraction_assignment_operator = 302, /* subtraction_assignment_operator  */
+    assignment_operator = 303,     /* assignment_operator  */
+    OR_operator = 304,             /* OR_operator  */
+    AND_operator = 305,            /* AND_operator  */
+    pipe_operator = 306,           /* pipe_operator  */
+    caret_operator = 307,          /* caret_operator  */
+    amp_operator = 308,            /* amp_operator  */
+    equality_operator = 309,       /* equality_operator  */
+    inequality_operator = 310,     /* inequality_operator  */
+    lessthan_assignment_operator = 311, /* lessthan_assignment_operator  */
+    lessthan_operator = 312,       /* lessthan_operator  */
+    greaterthan_assignment_operator = 313, /* greaterthan_assignment_operator  */
+    greaterthan_operator = 314,    /* greaterthan_operator  */
+    leftshift_operator = 315,      /* leftshift_operator  */
+    rightshift_operator = 316,     /* rightshift_operator  */
+    add_operator = 317,            /* add_operator  */
+    subtract_operator = 318,       /* subtract_operator  */
+    multiplication_operator = 319, /* multiplication_operator  */
+    division_operator = 320,       /* division_operator  */
+    modulo_operator = 321,         /* modulo_operator  */
+    SIZEOF = 322,                  /* SIZEOF  */
+    tilde_operator = 323,          /* tilde_operator  */
+    exclamation_operator = 324,    /* exclamation_operator  */
+    increment_operator = 325,      /* increment_operator  */
+    decrement_operator = 326       /* decrement_operator  */
   };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Tokens.  */
+/* Token kinds.  */
+#define YYEMPTY -2
+#define YYEOF 0
+#define YYerror 256
+#define YYUNDEF 257
 #define IF 258
 #define INT 259
 #define CHAR 260
@@ -201,6 +211,8 @@ typedef int YYSTYPE;
 
 extern YYSTYPE yylval;
 
+
 int yyparse (void);
+
 
 #endif /* !YY_YY_Y_TAB_H_INCLUDED  */

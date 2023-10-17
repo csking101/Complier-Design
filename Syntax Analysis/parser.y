@@ -326,8 +326,8 @@ switch_case
             : SWITCH  '(' identifier ')' '{' case_list '}' ;
 
 case_list
-            : case_entry
-            | case_list case_entry
+            : case_entry BREAK ';'
+            | case_list case_entry BREAK ';'
             ;
 
 case_entry  
