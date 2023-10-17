@@ -10,9 +10,11 @@
 		char class[100];
 		char type[100];
 		char value[100];
-		int lineno;
+		int lineno[100];
 		int length;
 	}ST[1007];
+
+    int isInit = 0;
 
 	struct constanttable
 	{
@@ -34,8 +36,22 @@
 		return value;
 	}
 
+    void initCheck(){
+        if (isInit == 0){
+            for (int row = 0;row < 1007;row++){
+		        for (int l = 0;l < 100;l++){
+			        ST[row].lineno[l] = -1;
+                }
+		    }
+            isInit = 1;
+        }
+    }
+
 	int lookupST(char *str)
 	{
+        initCheck();
+	
+        
 		int value = hash(str);
 		if(ST[value].length == 0)
 		{
@@ -60,6 +76,7 @@
 
 	int lookupCT(char *str)
 	{
+        initCheck();
 		int value = hash(str);
 		if(CT[value].length == 0)
 			return 0;
@@ -80,13 +97,18 @@
 
 	void insertST(char *str1, char *str2)
 	{
+        int value = hash(str1);
 		if(lookupST(str1))
 		{
+            strcpy(ST[value].name, str1);
+            strcpy(ST[value].class, str2);
+            ST[value].length = strlen(str1);
+            insertSTline(str1,yylineno);
 			return;
 		}
 		else
 		{
-			int value = hash(str1);
+			
 			if(ST[value].length == 0)
 			{
 				strcpy(ST[value].name,str1);
@@ -115,6 +137,7 @@
 
 	void insertSTtype(char *str1, char *str2)
 	{
+        initCheck();
 		for(int i = 0 ; i < 1007 ; i++)
 		{
 			if(strcmp(ST[i].name,str1)==0)
@@ -126,6 +149,7 @@
 
 	void insertSTvalue(char *str1, char *str2)
 	{
+        initCheck();
 		for(int i = 0 ; i < 1007 ; i++)
 		{
 			if(strcmp(ST[i].name,str1)==0)
@@ -137,11 +161,19 @@
 
 	void insertSTline(char *str1, int line)
 	{
+        initCheck();
 		for(int i = 0 ; i < 1007 ; i++)
 		{
 			if(strcmp(ST[i].name,str1)==0)
 			{
-				ST[i].lineno = line;
+				// ST[i].lineno[0] = line;
+                for (int j = 0;j<100;j++){
+                    if (ST[i].lineno[j] == -1) {
+                        ST[i].lineno[j] = line;
+                        printf("%s %d\n",str1,line);
+                        return;
+                    }
+                }
 			}
 		}
 	}
@@ -191,7 +223,13 @@
 			{
 				continue;
 			}
-			printf("%10s | %15s | %10s | %10s | %10d\n",ST[i].name, ST[i].class, ST[i].type, ST[i].value, ST[i].lineno);
+			//printf("%10s | %15s | %10s | %10s | %10d\n",ST[i].name, ST[i].class, ST[i].type, ST[i].value, ST[i].lineno);
+            printf("%10s | %15s | %10s | %10s | ",ST[i].name, ST[i].class, ST[i].type, ST[i].value);
+            for (int j = 0;j < 100;j++){
+                if (ST[i].lineno[j] == -1) break;
+                printf("%d -> ",ST[i].lineno[j]);
+            }
+            printf("\n");
 		}
     }
 

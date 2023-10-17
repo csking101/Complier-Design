@@ -18,7 +18,8 @@
 // %expect 2
 
 %nonassoc IF
-%token INT CHAR FLOAT DOUBLE LONG SHORT SIGNED UNSIGNED CONST STRUCT ENUM UNION
+%token INT CHAR FLOAT DOUBLE LONG SHORT SIGNED UNSIGNED 
+%token CONST STRUCT ENUM UNION
 %token RETURN MAIN
 %token VOID
 %token WHILE FOR DO 
@@ -349,7 +350,9 @@ void printCT();
 
 int main(int argc , char **argv)
 {
+	
 	yyin = fopen(argv[1], "r");
+
 	yyparse();
 
 	if(flag == 0)

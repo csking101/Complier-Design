@@ -61,8 +61,8 @@ extern int yydebug;
     DOUBLE = 262,                  /* DOUBLE  */
     LONG = 263,                    /* LONG  */
     SHORT = 264,                   /* SHORT  */
-    SIGNED = 265,                  /* SIGNED  */
-    UNSIGNED = 266,                /* UNSIGNED  */
+    UNSIGNED = 265,                /* UNSIGNED  */
+    SIGNED = 266,                  /* SIGNED  */
     CONST = 267,                   /* CONST  */
     STRUCT = 268,                  /* STRUCT  */
     ENUM = 269,                    /* ENUM  */
@@ -138,8 +138,8 @@ extern int yydebug;
 #define DOUBLE 262
 #define LONG 263
 #define SHORT 264
-#define SIGNED 265
-#define UNSIGNED 266
+#define UNSIGNED 265
+#define SIGNED 266
 #define CONST 267
 #define STRUCT 268
 #define ENUM 269

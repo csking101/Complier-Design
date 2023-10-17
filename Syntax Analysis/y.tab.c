@@ -135,8 +135,8 @@ extern int yydebug;
     DOUBLE = 262,                  /* DOUBLE  */
     LONG = 263,                    /* LONG  */
     SHORT = 264,                   /* SHORT  */
-    SIGNED = 265,                  /* SIGNED  */
-    UNSIGNED = 266,                /* UNSIGNED  */
+    UNSIGNED = 265,                /* UNSIGNED  */
+    SIGNED = 266,                  /* SIGNED  */
     CONST = 267,                   /* CONST  */
     STRUCT = 268,                  /* STRUCT  */
     ENUM = 269,                    /* ENUM  */
@@ -212,8 +212,8 @@ extern int yydebug;
 #define DOUBLE 262
 #define LONG 263
 #define SHORT 264
-#define SIGNED 265
-#define UNSIGNED 266
+#define UNSIGNED 265
+#define SIGNED 266
 #define CONST 267
 #define STRUCT 268
 #define ENUM 269
@@ -304,8 +304,8 @@ enum yysymbol_kind_t
   YYSYMBOL_DOUBLE = 7,                     /* DOUBLE  */
   YYSYMBOL_LONG = 8,                       /* LONG  */
   YYSYMBOL_SHORT = 9,                      /* SHORT  */
-  YYSYMBOL_SIGNED = 10,                    /* SIGNED  */
-  YYSYMBOL_UNSIGNED = 11,                  /* UNSIGNED  */
+  YYSYMBOL_UNSIGNED = 10,                  /* UNSIGNED  */
+  YYSYMBOL_SIGNED = 11,                    /* SIGNED  */
   YYSYMBOL_CONST = 12,                     /* CONST  */
   YYSYMBOL_STRUCT = 13,                    /* STRUCT  */
   YYSYMBOL_ENUM = 14,                      /* ENUM  */
@@ -845,23 +845,23 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    61,    61,    64,    65,    68,    69,    70,    71,    74,
-      75,    76,    79,    82,    83,    86,    86,    88,    88,    91,
-      92,    95,    96,    99,   100,   101,   104,   104,   104,   104,
-     105,   106,   107,   108,   109,   112,   112,   112,   112,   115,
-     115,   115,   115,   118,   118,   121,   121,   124,   124,   126,
-     126,   129,   132,   133,   136,   136,   136,   136,   136,   139,
-     142,   145,   148,   148,   151,   154,   157,   158,   161,   161,
-     164,   165,   168,   168,   169,   169,   170,   170,   171,   172,
-     175,   178,   179,   182,   183,   186,   189,   190,   193,   194,
-     195,   198,   201,   202,   205,   208,   211,   214,   217,   218,
-     221,   222,   225,   226,   227,   228,   229,   230,   231,   232,
-     235,   238,   238,   241,   244,   245,   248,   249,   252,   255,
-     256,   259,   259,   259,   260,   260,   260,   263,   264,   267,
-     268,   271,   272,   275,   275,   275,   278,   278,   281,   282,
-     285,   286,   289,   290,   290,   293,   296,   296,   299,   302,
-     303,   306,   307,   308,   309,   312,   316,   317,   320,   321,
-     325,   328,   329,   333,   334,   335,   336
+       0,    72,    72,    75,    76,    79,    80,    81,    82,    85,
+      86,    87,    90,    93,    94,    97,    97,    99,    99,   102,
+     103,   106,   107,   110,   111,   112,   115,   115,   115,   115,
+     116,   117,   118,   119,   120,   123,   123,   123,   123,   126,
+     126,   126,   126,   129,   129,   132,   132,   135,   135,   137,
+     137,   140,   143,   144,   147,   147,   147,   147,   147,   150,
+     153,   156,   159,   159,   162,   165,   168,   169,   172,   172,
+     175,   176,   179,   179,   180,   180,   181,   181,   182,   183,
+     186,   189,   190,   193,   194,   197,   200,   201,   204,   205,
+     206,   209,   212,   213,   216,   219,   222,   225,   228,   229,
+     232,   233,   236,   237,   238,   239,   240,   241,   242,   243,
+     246,   249,   249,   252,   255,   256,   259,   260,   263,   266,
+     267,   270,   270,   270,   271,   271,   271,   274,   275,   278,
+     279,   282,   283,   286,   286,   286,   289,   289,   292,   293,
+     296,   297,   300,   301,   301,   304,   307,   307,   310,   313,
+     314,   317,   318,   319,   320,   323,   327,   328,   331,   332,
+     336,   339,   340,   344,   345,   346,   347
 };
 #endif
 
@@ -878,7 +878,7 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "IF", "INT", "CHAR",
-  "FLOAT", "DOUBLE", "LONG", "SHORT", "SIGNED", "UNSIGNED", "CONST",
+  "FLOAT", "DOUBLE", "LONG", "SHORT", "UNSIGNED", "SIGNED", "CONST",
   "STRUCT", "ENUM", "UNION", "RETURN", "MAIN", "VOID", "WHILE", "FOR",
   "DO", "BREAK", "ENDIF", "SWITCH", "CASE", "DEFAULT", "SPREAD", "AUTO",
   "STATIC", "REGISTER", "EXTERN", "identifier", "integer_constant",
@@ -978,12 +978,12 @@ static const yytype_int16 yypact[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-      58,    26,    27,    28,    29,    44,    46,    42,    38,    52,
+      58,    26,    27,    28,    29,    44,    46,    38,    42,    52,
        0,    53,    34,    54,    55,    56,    57,     0,     4,     5,
        0,     7,    11,     0,     0,     6,    63,     8,    43,    30,
-      45,    31,    39,    44,    46,    33,    35,    44,    46,    32,
+      45,    31,    35,    44,    46,    32,    39,    44,    46,    33,
        0,     1,     3,     2,     0,    47,     0,     0,     0,    59,
-       0,    62,    40,    41,    36,    37,     0,    60,    15,    51,
+       0,    62,    36,    37,    40,    41,     0,    60,    15,    51,
       14,     0,     0,     0,    68,    64,    67,    58,   158,     0,
      156,    20,     0,    12,    58,     0,     9,    71,     0,    65,
        0,     0,     0,     0,    58,     0,     0,   138,   151,   152,
@@ -1025,7 +1025,7 @@ static const yytype_int16 yypgoto[] =
 static const yytype_int16 yydefgoto[] =
 {
        0,    17,    43,    18,    96,    59,    73,    60,    71,   123,
-     124,   186,   231,    20,    39,    35,    29,    31,    21,    61,
+     124,   186,   231,    20,    35,    39,    29,    31,    21,    61,
      127,    22,    97,    24,    25,    26,    49,    50,    51,    65,
       79,    66,    77,   130,   144,    99,   145,   100,   101,   243,
      102,   103,   134,   104,   217,   233,   252,   261,   105,   178,
@@ -1116,7 +1116,7 @@ static const yytype_uint8 yystos[] =
        0,     4,     5,     6,     7,     8,     9,    10,    11,    13,
       14,    15,    18,    28,    29,    30,    31,    83,    85,    86,
       95,   100,   103,   104,   105,   106,   107,   153,     4,    98,
-       4,    99,     4,     8,     9,    97,     4,     8,     9,    96,
+       4,    99,     4,     8,     9,    96,     4,     8,     9,    97,
       32,     0,    83,    84,    32,    32,    12,    95,    95,   108,
      109,   110,    98,    99,    98,    99,    76,    78,    32,    87,
       89,   101,    95,    87,    32,   111,   113,    79,    32,   154,
@@ -1648,55 +1648,55 @@ yyreduce:
   switch (yyn)
     {
   case 15: /* $@1: %empty  */
-#line 86 "parser.y"
+#line 97 "parser.y"
                                      { ins(); }
 #line 1654 "y.tab.c"
     break;
 
   case 47: /* $@2: %empty  */
-#line 124 "parser.y"
+#line 135 "parser.y"
                                                      { ins(); }
 #line 1660 "y.tab.c"
     break;
 
   case 60: /* function_declaration_type: type_specifier identifier '('  */
-#line 142 "parser.y"
+#line 153 "parser.y"
                                                          { ins();}
 #line 1666 "y.tab.c"
     break;
 
   case 68: /* $@3: %empty  */
-#line 161 "parser.y"
+#line 172 "parser.y"
                                      { ins(); }
 #line 1672 "y.tab.c"
     break;
 
   case 95: /* string_initilization: assignment_operator string_constant  */
-#line 208 "parser.y"
+#line 219 "parser.y"
                                                               { insV(); }
 #line 1678 "y.tab.c"
     break;
 
   case 151: /* constant: integer_constant  */
-#line 306 "parser.y"
+#line 317 "parser.y"
                                                 { insV(); }
 #line 1684 "y.tab.c"
     break;
 
   case 152: /* constant: string_constant  */
-#line 307 "parser.y"
+#line 318 "parser.y"
                                                 { insV(); }
 #line 1690 "y.tab.c"
     break;
 
   case 153: /* constant: float_constant  */
-#line 308 "parser.y"
+#line 319 "parser.y"
                                                 { insV(); }
 #line 1696 "y.tab.c"
     break;
 
   case 154: /* constant: character_constant  */
-#line 309 "parser.y"
+#line 320 "parser.y"
                                             { insV(); }
 #line 1702 "y.tab.c"
     break;
@@ -1895,7 +1895,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 339 "parser.y"
+#line 350 "parser.y"
 
 
 extern FILE *yyin;
@@ -1909,7 +1909,9 @@ void printCT();
 
 int main(int argc , char **argv)
 {
+	
 	yyin = fopen(argv[1], "r");
+
 	yyparse();
 
 	if(flag == 0)

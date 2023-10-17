@@ -4,6 +4,7 @@
 void voidReturningFunc(int a)
 {
     int abc=1;
+    a = a + 5;
     return a;
 }
 
