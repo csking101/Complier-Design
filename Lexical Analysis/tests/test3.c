@@ -1,7 +1,8 @@
 /* 
-C program to find the size of int, char,
-float and double data types
+/* C program to find the size of int, char,
+float and double data types */
 */
+
 #include <stdio.h>
 
 int main(){
