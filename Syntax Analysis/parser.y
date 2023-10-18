@@ -197,14 +197,13 @@ scanf_statement
 			:  SCANF '(' scanf_parameters ')' ;
 
 printf_parameters
-    : string_constant ',' expression
-    | printf_parameters ',' expression
-    | string_constant;
+			: printf_parameters ',' expression
+			| string_constant;
 
 scanf_parameters
-    : scanf_parameters ',' identifier
-    | scanf_parameters ',' amp_operator identifier
-    | string_constant;
+			: scanf_parameters ',' identifier
+			| scanf_parameters ',' amp_operator identifier
+			| string_constant;
 
 compound_statement 
 			: '{' statment_list '}' ;
