@@ -14,15 +14,14 @@ void main()
     int n,i;
     char ch;//Character Datatype
     int x;
-    int a[10];
-    for (i=0;i<10;i++){
+    int a[10][8];
+    for (int i=0;i<10;i++){
         if(i<10){
             int y;
             while(x<10){
                 x++;
             }
         }
-
     }
    x=3;
     

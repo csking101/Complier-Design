@@ -302,11 +302,20 @@ IN "include"
 "switch"		{ insertST(yytext, "Keyword");  return SWITCH;}
 "case"			{ insertST(yytext, "Keyword");  return CASE;}
 
-"auto"          { insertST(yytext, "Keyword"); return AUTO; } // need to add to parser
-"static"        { insertST(yytext, "Keyword"); return STATIC; } // need to add to parser
-"register"      { insertST(yytext, "Keyword"); return REGISTER; } // need to add to parser
-"extern"        { insertST(yytext, "Keyword"); return EXTERN; } // need to add to parser
+"int*"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return INTs;}
+"float*"		{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return FLOATs;}
+"char*"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return CHARs;}
+"double*"		{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return DOUBLEs;}
 
+"auto"          { insertST(yytext, "Keyword"); return AUTO; }
+"static"        { insertST(yytext, "Keyword"); return STATIC; }
+"register"      { insertST(yytext, "Keyword"); return REGISTER; }
+"extern"        { insertST(yytext, "Keyword"); return EXTERN; }
+"volatile"      { insertST(yytext, "Keyword"); return EXTERN; }
+"inline"        { insertST(yytext, "Keyword"); return INLINE; }
+
+"printf"		{ insertST(yytext, "Keyword");  return PRINTF;}
+"scanf"			{ insertST(yytext, "Keyword");  return SCANF;}
 
 "++"			{ return increment_operator; }
 "--"			{ return decrement_operator; }

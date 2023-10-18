@@ -20,7 +20,7 @@ int main()
 			break;
 
 		default:
-			printf("Default case is Matched.");
+			printf(".");
 			break;
 	}
 

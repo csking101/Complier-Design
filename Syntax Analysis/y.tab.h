@@ -63,66 +63,74 @@ extern int yydebug;
     SHORT = 264,                   /* SHORT  */
     SIGNED = 265,                  /* SIGNED  */
     UNSIGNED = 266,                /* UNSIGNED  */
-    CONST = 267,                   /* CONST  */
-    STRUCT = 268,                  /* STRUCT  */
-    ENUM = 269,                    /* ENUM  */
-    UNION = 270,                   /* UNION  */
-    RETURN = 271,                  /* RETURN  */
-    MAIN = 272,                    /* MAIN  */
-    VOID = 273,                    /* VOID  */
-    WHILE = 274,                   /* WHILE  */
-    FOR = 275,                     /* FOR  */
-    DO = 276,                      /* DO  */
-    BREAK = 277,                   /* BREAK  */
-    ENDIF = 278,                   /* ENDIF  */
-    SWITCH = 279,                  /* SWITCH  */
-    CASE = 280,                    /* CASE  */
-    DEFAULT = 281,                 /* DEFAULT  */
-    SPREAD = 282,                  /* SPREAD  */
-    AUTO = 283,                    /* AUTO  */
-    STATIC = 284,                  /* STATIC  */
-    REGISTER = 285,                /* REGISTER  */
-    EXTERN = 286,                  /* EXTERN  */
-    identifier = 287,              /* identifier  */
-    integer_constant = 288,        /* integer_constant  */
-    string_constant = 289,         /* string_constant  */
-    float_constant = 290,          /* float_constant  */
-    character_constant = 291,      /* character_constant  */
-    ELSE = 292,                    /* ELSE  */
-    leftshift_assignment_operator = 293, /* leftshift_assignment_operator  */
-    rightshift_assignment_operator = 294, /* rightshift_assignment_operator  */
-    XOR_assignment_operator = 295, /* XOR_assignment_operator  */
-    OR_assignment_operator = 296,  /* OR_assignment_operator  */
-    AND_assignment_operator = 297, /* AND_assignment_operator  */
-    modulo_assignment_operator = 298, /* modulo_assignment_operator  */
-    multiplication_assignment_operator = 299, /* multiplication_assignment_operator  */
-    division_assignment_operator = 300, /* division_assignment_operator  */
-    addition_assignment_operator = 301, /* addition_assignment_operator  */
-    subtraction_assignment_operator = 302, /* subtraction_assignment_operator  */
-    assignment_operator = 303,     /* assignment_operator  */
-    OR_operator = 304,             /* OR_operator  */
-    AND_operator = 305,            /* AND_operator  */
-    pipe_operator = 306,           /* pipe_operator  */
-    caret_operator = 307,          /* caret_operator  */
-    amp_operator = 308,            /* amp_operator  */
-    equality_operator = 309,       /* equality_operator  */
-    inequality_operator = 310,     /* inequality_operator  */
-    lessthan_assignment_operator = 311, /* lessthan_assignment_operator  */
-    lessthan_operator = 312,       /* lessthan_operator  */
-    greaterthan_assignment_operator = 313, /* greaterthan_assignment_operator  */
-    greaterthan_operator = 314,    /* greaterthan_operator  */
-    leftshift_operator = 315,      /* leftshift_operator  */
-    rightshift_operator = 316,     /* rightshift_operator  */
-    add_operator = 317,            /* add_operator  */
-    subtract_operator = 318,       /* subtract_operator  */
-    multiplication_operator = 319, /* multiplication_operator  */
-    division_operator = 320,       /* division_operator  */
-    modulo_operator = 321,         /* modulo_operator  */
-    SIZEOF = 322,                  /* SIZEOF  */
-    tilde_operator = 323,          /* tilde_operator  */
-    exclamation_operator = 324,    /* exclamation_operator  */
-    increment_operator = 325,      /* increment_operator  */
-    decrement_operator = 326       /* decrement_operator  */
+    INTs = 267,                    /* INTs  */
+    FLOATs = 268,                  /* FLOATs  */
+    CHARs = 269,                   /* CHARs  */
+    DOUBLEs = 270,                 /* DOUBLEs  */
+    CONST = 271,                   /* CONST  */
+    STRUCT = 272,                  /* STRUCT  */
+    ENUM = 273,                    /* ENUM  */
+    UNION = 274,                   /* UNION  */
+    RETURN = 275,                  /* RETURN  */
+    MAIN = 276,                    /* MAIN  */
+    VOID = 277,                    /* VOID  */
+    WHILE = 278,                   /* WHILE  */
+    FOR = 279,                     /* FOR  */
+    DO = 280,                      /* DO  */
+    BREAK = 281,                   /* BREAK  */
+    ENDIF = 282,                   /* ENDIF  */
+    SWITCH = 283,                  /* SWITCH  */
+    CASE = 284,                    /* CASE  */
+    DEFAULT = 285,                 /* DEFAULT  */
+    SPREAD = 286,                  /* SPREAD  */
+    AUTO = 287,                    /* AUTO  */
+    STATIC = 288,                  /* STATIC  */
+    REGISTER = 289,                /* REGISTER  */
+    EXTERN = 290,                  /* EXTERN  */
+    VOLATILE = 291,                /* VOLATILE  */
+    INLINE = 292,                  /* INLINE  */
+    PRINTF = 293,                  /* PRINTF  */
+    SCANF = 294,                   /* SCANF  */
+    identifier = 295,              /* identifier  */
+    integer_constant = 296,        /* integer_constant  */
+    string_constant = 297,         /* string_constant  */
+    float_constant = 298,          /* float_constant  */
+    character_constant = 299,      /* character_constant  */
+    ELSE = 300,                    /* ELSE  */
+    leftshift_assignment_operator = 301, /* leftshift_assignment_operator  */
+    rightshift_assignment_operator = 302, /* rightshift_assignment_operator  */
+    XOR_assignment_operator = 303, /* XOR_assignment_operator  */
+    OR_assignment_operator = 304,  /* OR_assignment_operator  */
+    AND_assignment_operator = 305, /* AND_assignment_operator  */
+    modulo_assignment_operator = 306, /* modulo_assignment_operator  */
+    multiplication_assignment_operator = 307, /* multiplication_assignment_operator  */
+    division_assignment_operator = 308, /* division_assignment_operator  */
+    addition_assignment_operator = 309, /* addition_assignment_operator  */
+    subtraction_assignment_operator = 310, /* subtraction_assignment_operator  */
+    assignment_operator = 311,     /* assignment_operator  */
+    OR_operator = 312,             /* OR_operator  */
+    AND_operator = 313,            /* AND_operator  */
+    pipe_operator = 314,           /* pipe_operator  */
+    caret_operator = 315,          /* caret_operator  */
+    amp_operator = 316,            /* amp_operator  */
+    equality_operator = 317,       /* equality_operator  */
+    inequality_operator = 318,     /* inequality_operator  */
+    lessthan_assignment_operator = 319, /* lessthan_assignment_operator  */
+    lessthan_operator = 320,       /* lessthan_operator  */
+    greaterthan_assignment_operator = 321, /* greaterthan_assignment_operator  */
+    greaterthan_operator = 322,    /* greaterthan_operator  */
+    leftshift_operator = 323,      /* leftshift_operator  */
+    rightshift_operator = 324,     /* rightshift_operator  */
+    add_operator = 325,            /* add_operator  */
+    subtract_operator = 326,       /* subtract_operator  */
+    multiplication_operator = 327, /* multiplication_operator  */
+    division_operator = 328,       /* division_operator  */
+    modulo_operator = 329,         /* modulo_operator  */
+    SIZEOF = 330,                  /* SIZEOF  */
+    tilde_operator = 331,          /* tilde_operator  */
+    exclamation_operator = 332,    /* exclamation_operator  */
+    increment_operator = 333,      /* increment_operator  */
+    decrement_operator = 334       /* decrement_operator  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -140,66 +148,74 @@ extern int yydebug;
 #define SHORT 264
 #define SIGNED 265
 #define UNSIGNED 266
-#define CONST 267
-#define STRUCT 268
-#define ENUM 269
-#define UNION 270
-#define RETURN 271
-#define MAIN 272
-#define VOID 273
-#define WHILE 274
-#define FOR 275
-#define DO 276
-#define BREAK 277
-#define ENDIF 278
-#define SWITCH 279
-#define CASE 280
-#define DEFAULT 281
-#define SPREAD 282
-#define AUTO 283
-#define STATIC 284
-#define REGISTER 285
-#define EXTERN 286
-#define identifier 287
-#define integer_constant 288
-#define string_constant 289
-#define float_constant 290
-#define character_constant 291
-#define ELSE 292
-#define leftshift_assignment_operator 293
-#define rightshift_assignment_operator 294
-#define XOR_assignment_operator 295
-#define OR_assignment_operator 296
-#define AND_assignment_operator 297
-#define modulo_assignment_operator 298
-#define multiplication_assignment_operator 299
-#define division_assignment_operator 300
-#define addition_assignment_operator 301
-#define subtraction_assignment_operator 302
-#define assignment_operator 303
-#define OR_operator 304
-#define AND_operator 305
-#define pipe_operator 306
-#define caret_operator 307
-#define amp_operator 308
-#define equality_operator 309
-#define inequality_operator 310
-#define lessthan_assignment_operator 311
-#define lessthan_operator 312
-#define greaterthan_assignment_operator 313
-#define greaterthan_operator 314
-#define leftshift_operator 315
-#define rightshift_operator 316
-#define add_operator 317
-#define subtract_operator 318
-#define multiplication_operator 319
-#define division_operator 320
-#define modulo_operator 321
-#define SIZEOF 322
-#define tilde_operator 323
-#define exclamation_operator 324
-#define increment_operator 325
-#define decrement_operator 326
+#define INTs 267
+#define FLOATs 268
+#define CHARs 269
+#define DOUBLEs 270
+#define CONST 271
+#define STRUCT 272
+#define ENUM 273
+#define UNION 274
+#define RETURN 275
+#define MAIN 276
+#define VOID 277
+#define WHILE 278
+#define FOR 279
+#define DO 280
+#define BREAK 281
+#define ENDIF 282
+#define SWITCH 283
+#define CASE 284
+#define DEFAULT 285
+#define SPREAD 286
+#define AUTO 287
+#define STATIC 288
+#define REGISTER 289
+#define EXTERN 290
+#define VOLATILE 291
+#define INLINE 292
+#define PRINTF 293
+#define SCANF 294
+#define identifier 295
+#define integer_constant 296
+#define string_constant 297
+#define float_constant 298
+#define character_constant 299
+#define ELSE 300
+#define leftshift_assignment_operator 301
+#define rightshift_assignment_operator 302
+#define XOR_assignment_operator 303
+#define OR_assignment_operator 304
+#define AND_assignment_operator 305
+#define modulo_assignment_operator 306
+#define multiplication_assignment_operator 307
+#define division_assignment_operator 308
+#define addition_assignment_operator 309
+#define subtraction_assignment_operator 310
+#define assignment_operator 311
+#define OR_operator 312
+#define AND_operator 313
+#define pipe_operator 314
+#define caret_operator 315
+#define amp_operator 316
+#define equality_operator 317
+#define inequality_operator 318
+#define lessthan_assignment_operator 319
+#define lessthan_operator 320
+#define greaterthan_assignment_operator 321
+#define greaterthan_operator 322
+#define leftshift_operator 323
+#define rightshift_operator 324
+#define add_operator 325
+#define subtract_operator 326
+#define multiplication_operator 327
+#define division_operator 328
+#define modulo_operator 329
+#define SIZEOF 330
+#define tilde_operator 331
+#define exclamation_operator 332
+#define increment_operator 333
+#define decrement_operator 334
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
