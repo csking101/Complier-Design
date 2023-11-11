@@ -117,7 +117,7 @@
 				strcpy(ST[value].name,str1);
 				strcpy(ST[value].class,str2);
 				ST[value].length = strlen(str1);
-				ST[value].nesting_val = 9999;
+				ST[value].nesting_val = current_nesting;
 				ST[value].params_count = -1;
 				insertSTline(str1,yylineno);
 				return;
@@ -137,7 +137,7 @@
 			strcpy(ST[pos].name,str1);
 			strcpy(ST[pos].class,str2);
 			ST[pos].length = strlen(str1);
-			ST[pos].nesting_val = 9999;
+			ST[pos].nesting_val = current_nesting;
 			ST[pos].params_count = -1;
 		}
 	}
@@ -273,7 +273,7 @@
 		{
 			if(ST[i].nesting_val == nesting)
 			{
-				ST[i].nesting_val = 99999;
+				ST[i].length = 0 ;
 			}
 		}
 
