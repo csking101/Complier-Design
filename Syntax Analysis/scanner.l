@@ -301,6 +301,8 @@ IN "include"
 "break"			{ insertST(yytext, "Keyword");  return BREAK;}
 "switch"		{ insertST(yytext, "Keyword");  return SWITCH;}
 "case"			{ insertST(yytext, "Keyword");  return CASE;}
+"continue"		{ insertST(yytext, "Keyword");  return CONTINUE;}
+		
 
 "int*"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return INTs;}
 "float*"		{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return FLOATs;}
