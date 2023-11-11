@@ -3,18 +3,17 @@
 	#include <string.h>
 	#include "y.tab.h"
 
-
 	struct symboltable
 	{
 		char name[100];
 		char class[100];
 		char type[100];
 		char value[100];
-		int lineno[100];
+		int nesting_val;
+		int lineno;
 		int length;
+		int params_count;
 	}ST[1007];
-
-    int isInit = 0;
 
 	struct constanttable
 	{
@@ -22,6 +21,11 @@
 		char type[100];
 		int length;
 	}CT[1007];
+
+	int current_nesting = 0;
+	int params_count = 0;
+	extern int yylval;
+
 
 	int hash(char *str)
 	{
@@ -36,30 +40,17 @@
 		return value;
 	}
 
-    void initCheck(){
-        if (isInit == 0){
-            for (int row = 0;row < 1007;row++){
-		        for (int l = 0;l < 100;l++){
-			        ST[row].lineno[l] = -1;
-                }
-		    }
-            isInit = 1;
-        }
-    }
-
 	int lookupST(char *str)
 	{
-        initCheck();
-	
-        
 		int value = hash(str);
 		if(ST[value].length == 0)
 		{
 			return 0;
 		}
 		else if(strcmp(ST[value].name,str)==0)
-		{	
-			return 1;
+		{
+			
+			return value;
 		}
 		else
 		{
@@ -67,7 +58,8 @@
 			{
 				if(strcmp(ST[i].name,str)==0)
 				{
-					return 1;
+					
+					return i;
 				}
 			}
 			return 0;
@@ -76,7 +68,6 @@
 
 	int lookupCT(char *str)
 	{
-        initCheck();
 		int value = hash(str);
 		if(CT[value].length == 0)
 			return 0;
@@ -95,25 +86,39 @@
 		}
 	}
 
+	void insertSTline(char *str1, int line)
+	{
+		for(int i = 0 ; i < 1007 ; i++)
+		{
+			if(strcmp(ST[i].name,str1)==0)
+			{
+				ST[i].lineno = line;
+			}
+		}
+	}
+
+
 	void insertST(char *str1, char *str2)
 	{
-        int value = hash(str1);
 		if(lookupST(str1))
 		{
-            strcpy(ST[value].name, str1);
-            strcpy(ST[value].class, str2);
-            ST[value].length = strlen(str1);
-            insertSTline(str1,yylineno);
+			if(strcmp(ST[lookupST(str1)].class,"Identifier")==0 && strcmp(str2,"Array Identifier")==0)
+			{
+				printf("Error use of array\n");
+				exit(0);
+			}	
 			return;
 		}
 		else
 		{
-			
+			int value = hash(str1);
 			if(ST[value].length == 0)
 			{
 				strcpy(ST[value].name,str1);
 				strcpy(ST[value].class,str2);
 				ST[value].length = strlen(str1);
+				ST[value].nesting_val = 9999;
+				ST[value].params_count = -1;
 				insertSTline(str1,yylineno);
 				return;
 			}
@@ -132,12 +137,13 @@
 			strcpy(ST[pos].name,str1);
 			strcpy(ST[pos].class,str2);
 			ST[pos].length = strlen(str1);
+			ST[pos].nesting_val = 9999;
+			ST[pos].params_count = -1;
 		}
 	}
 
 	void insertSTtype(char *str1, char *str2)
 	{
-        initCheck();
 		for(int i = 0 ; i < 1007 ; i++)
 		{
 			if(strcmp(ST[i].name,str1)==0)
@@ -149,33 +155,84 @@
 
 	void insertSTvalue(char *str1, char *str2)
 	{
-        initCheck();
 		for(int i = 0 ; i < 1007 ; i++)
 		{
-			if(strcmp(ST[i].name,str1)==0)
+			if(strcmp(ST[i].name,str1)==0 && ST[i].nesting_val == current_nesting)
 			{
 				strcpy(ST[i].value,str2);
 			}
 		}
 	}
 
-	void insertSTline(char *str1, int line)
+
+	void insertSTnest(char *s, int nest)
 	{
-        initCheck();
-		for(int i = 0 ; i < 1007 ; i++)
+		if(lookupST(s) && ST[lookupST(s)].nesting_val != 9999)
 		{
-			if(strcmp(ST[i].name,str1)==0)
+             int pos = 0;
+             int value = hash(s);
+			for (int i = value + 1 ; i!=value ; i = (i+1)%1007)
 			{
-				// ST[i].lineno[0] = line;
-                for (int j = 0;j<100;j++){
-                    if (ST[i].lineno[j] == -1) {
-                        ST[i].lineno[j] = line;
-                        printf("%s %d\n",str1,line);
-                        return;
-                    }
-                }
+				if(ST[i].length == 0)
+				{
+					pos = i;
+					break;
+				}
+			}
+
+			strcpy(ST[pos].name,s);
+			strcpy(ST[pos].class,"Identifier");
+			ST[pos].length = strlen(s);
+			ST[pos].nesting_val = nest;
+			ST[pos].params_count = -1;
+			ST[pos].lineno = yylineno;
+		}
+		else
+		{
+			for(int i = 0 ; i < 1007 ; i++)
+			{
+				if(strcmp(ST[i].name,s)==0 )
+				{
+					ST[i].nesting_val = nest;
+				}
 			}
 		}
+	}
+
+	void insertSTparamscount(char *s, int count)
+	{
+		for(int i = 0 ; i < 1007 ; i++)
+		{
+			if(strcmp(ST[i].name,s)==0 )
+			{
+				ST[i].params_count = count;
+			}
+		}
+	}
+
+	int getSTparamscount(char *s)
+	{
+		for(int i = 0 ; i < 1007 ; i++)
+		{
+			if(strcmp(ST[i].name,s)==0 )
+			{
+				return ST[i].params_count;
+			}
+		}
+		return -2;
+	}
+
+	void insertSTF(char *s)
+	{
+		for(int i = 0 ; i < 1007 ; i++)
+		{
+			if(strcmp(ST[i].name,s)==0 )
+			{
+				strcpy(ST[i].class,"Function");
+				return;
+			}
+		}
+
 	}
 
 	void insertCT(char *str1, char *str2)
@@ -210,11 +267,142 @@
 		}
 	}
 
+	void deletedata (int nesting)
+	{
+		for(int i = 0 ; i < 1007 ; i++)
+		{
+			if(ST[i].nesting_val == nesting)
+			{
+				ST[i].nesting_val = 99999;
+			}
+		}
+
+
+	}
+
+	int checkscope(char *s)
+	{
+		int flag = 0;
+		for(int i = 0 ; i < 1000 ; i++)
+		{
+			if(strcmp(ST[i].name,s)==0)
+			{
+				if(ST[i].nesting_val > current_nesting)
+				{
+					flag = 1;
+				}
+				else
+				{
+					flag = 0;
+					break;
+				}
+			}
+		}
+		if(!flag)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	int check_id_is_func(char *s)
+	{
+		for(int i = 0 ; i < 1000 ; i++)
+		{
+			if(strcmp(ST[i].name,s)==0)
+			{
+				if(strcmp(ST[i].class,"Function")==0)
+					return 1;
+			}
+		}
+		return 0;
+	}
+
+	int checkarray(char *s)
+	{
+		for(int i = 0 ; i < 1000 ; i++)
+		{
+			if(strcmp(ST[i].name,s)==0)
+			{
+				if(strcmp(ST[i].class,"Array Identifier")==0)
+				{
+					return 0;
+				}
+			}
+		}
+		return 1;
+	}
+
+	int duplicate(char *s)
+	{
+		for(int i = 0 ; i < 1000 ; i++)
+		{
+			if(strcmp(ST[i].name,s)==0)
+			{				
+				if(ST[i].nesting_val == current_nesting)
+				{
+			        return 1;
+				}
+			}
+		}
+		
+		return 0;
+	}
+
+	int check_duplicate(char* str)
+	{
+		for(int i=0; i<1007; i++)
+		{
+			if(strcmp(ST[i].name, str) == 0 && strcmp(ST[i].class, "Function") == 0)
+			{
+				printf("Function redeclaration not allowed\n");
+				exit(0);
+			}
+		}
+	}
+
+	int check_declaration(char* str, char *check_type)
+	{
+		for(int i=0; i<1007; i++)
+		{
+			if(strcmp(ST[i].name, str) == 0 && strcmp(ST[i].class, "Function") == 0 || strcmp(ST[i].name,"printf")==0 )
+			{
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+	int check_params(char* type_specifier)
+	{
+		if(!strcmp(type_specifier, "void"))
+		{
+			printf("Parameters cannot be of type void\n");
+			exit(0);
+		}
+		return 0;
+	}
+
+	char gettype(char *s, int flag)
+	{
+			for(int i = 0 ; i < 1007 ; i++ )
+			{
+				if(strcmp(ST[i].name,s)==0)
+				{
+					return ST[i].type[0];
+				}
+			}
+		
+	}
+
 	void printST()
 	{
-		printf("%10s | %15s | %10s | %10s | %10s\n","SYMBOL", "CLASS", "TYPE","VALUE", "LINE NO");
-		for(int i=0;i<81;i++) {
-			printf("-");
+		printf("%10s | %15s | %10s | %10s | %10s | %15s | %10s |\n","symbol name", "Class", "Type","Value", "Line No.", "Nesting Count", "Count of Params");
+		for(int i=0;i<100;i++) {
+			printf("_");
 		}
 		printf("\n");
 		for(int i = 0 ; i < 1007 ; i++)
@@ -223,22 +411,16 @@
 			{
 				continue;
 			}
-			//printf("%10s | %15s | %10s | %10s | %10d\n",ST[i].name, ST[i].class, ST[i].type, ST[i].value, ST[i].lineno);
-            printf("%10s | %15s | %10s | %10s | ",ST[i].name, ST[i].class, ST[i].type, ST[i].value);
-            for (int j = 0;j < 100;j++){
-                if (ST[i].lineno[j] == -1) break;
-                printf("%d -> ",ST[i].lineno[j]);
-            }
-            printf("\n");
+			printf("%10s | %15s | %10s | %10s | %10d | %15d | %10d |\n",ST[i].name, ST[i].class, ST[i].type, ST[i].value, ST[i].lineno, ST[i].nesting_val, ST[i].params_count);
 		}
     }
 
 
 	void printCT()
 	{
-		printf("%10s | %15s\n","NAME", "TYPE");
-		for(int i=0;i<81;i++) {
-			printf("-");
+		printf("%10s | %15s\n","constant name", "constant type");
+		for(int i=0;i<85;i++) {
+			printf("_");
 		}
 		printf("\n");
 		for(int i = 0 ; i < 1007 ; i++)
@@ -260,44 +442,42 @@ IN "include"
 
 %%
 \n 	{yylineno++;}
-([#][" "]*({IN})[ ]*([<]?)([A-Za-z]+)[.]?([A-Za-z]*)([>]?))/["\n"|\/|" "|"\t"]	{ }  // for #include
-([#][" "]*({DE})[" "]*([A-Za-z]+)(" ")*[0-9]+)/["\n"|\/|" "|"\t"]				{ }  // for #define
-\/\/(.*)																		{ }  // for single line comments
-\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/										{ }  // for multi line comments
-[ \n\t] ;                                                                            // for tab, newline and spaces
+([#][" "]*({IN})[ ]*([<]?)([A-Za-z]+)[.]?([A-Za-z]*)([>]?))/["\n"|\/|" "|"\t"]	{ }
+([#][" "]*({DE})[" "]*([A-Za-z]+)(" ")*[0-9]+)/["\n"|\/|" "|"\t"]				{ } 
+\/\/(.*)																		{ }
+\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/										{ }
+[ \n\t] ;
 ";"				{ return(';'); }
 ","				{ return(','); }
 ("{")			{ return('{'); }
 ("}")			{ return('}'); }
 "("				{ return('('); }
 ")"				{ return(')'); }
-"["     		{ return('['); }  // test with <:
-"]"      		{ return(']'); }
+("["|"<:")		{ return('['); }
+("]"|":>") 		{ return(']'); }
 ":"				{ return(':'); }
 "."				{ return('.'); }
-"..."           { return SPREAD;}
-
 "const"		    { insertST(yytext, "Keyword");  return CONST;}
 "default"		{ insertST(yytext, "Keyword");  return DEFAULT;}
-"char"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword"); return CHAR;}
+"char"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return CHAR;}
 "double"		{ strcpy(curtype,yytext); insertST(yytext, "Keyword"); return DOUBLE;}
-"else"			{ insertSTline(yytext, yylineno); insertST(yytext, "Keyword"); return ELSE;}
-"float"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return FLOAT;}
+"else"			{ insertST(yytext, "Keyword"); return ELSE;}
+"float"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword"); return FLOAT;}
+"while"			{ insertST(yytext, "Keyword"); return WHILE;}
 "do"			{ insertST(yytext, "Keyword"); return DO;}
 "for"			{ insertST(yytext, "Keyword"); return FOR;}
 "if"			{ insertST(yytext, "Keyword"); return IF;}
-"int"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return INT;}
-"long"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");  return LONG;}
-"return"		{ insertST(yytext, "Keyword");  return RETURN;}
-"short"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");  return SHORT;}
-"signed"		{ strcpy(curtype,yytext); insertST(yytext, "Keyword");  return SIGNED;}
-"sizeof" 		{ insertST(yytext, "Keyword");  return SIZEOF;}
-"struct"		{ strcpy(curtype,yytext); insertST(yytext, "Keyword");  return STRUCT;}
+"int"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword"); return INT;}
+"long"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword"); return LONG;}
+"return"		{ insertST(yytext, "Keyword"); return RETURN;}
+"short"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword"); return SHORT;}
+"signed"		{ strcpy(curtype,yytext); insertST(yytext, "Keyword"); return SIGNED;}
+"sizeof" 		{ insertST(yytext, "Keyword"); return SIZEOF;}
+"struct"		{ strcpy(curtype,yytext);   insertST(yytext, "Keyword");  return STRUCT;}
 "enum"		    { strcpy(curtype,yytext); insertST(yytext, "Keyword");  return ENUM;}
 "union"		    { strcpy(curtype,yytext); insertST(yytext, "Keyword");  return UNION;}
-"unsigned"		{ insertST(yytext, "Keyword");  return UNSIGNED;}
-"void"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");  return VOID;}
-"while"			{ insertST(yytext, "Keyword"); return WHILE;}
+"unsigned"		{ insertST(yytext, "Keyword");   return UNSIGNED;}
+"void"			{ strcpy(curtype,yytext);   insertST(yytext, "Keyword");  return VOID;}
 "break"			{ insertST(yytext, "Keyword");  return BREAK;}
 "switch"		{ insertST(yytext, "Keyword");  return SWITCH;}
 "case"			{ insertST(yytext, "Keyword");  return CASE;}
@@ -316,6 +496,7 @@ IN "include"
 
 "printf"		{ insertST(yytext, "Keyword");  return PRINTF;}
 "scanf"			{ insertST(yytext, "Keyword");  return SCANF;}
+
 
 "++"			{ return increment_operator; }
 "--"			{ return decrement_operator; }
@@ -353,10 +534,10 @@ IN "include"
 
 \"[^\n]*\"/[;|,|\)] 			{strcpy(curval,yytext); insertCT(yytext,"String Constant"); return string_constant;}
 \'[A-Z|a-z]\'/[;|,|\)|:] 		{strcpy(curval,yytext); insertCT(yytext,"Character Constant"); return character_constant;}
-[a-z|A-Z]([a-z|A-Z]|[0-9])*/\[ 	{strcpy(curid,yytext); insertST(yytext, "Array Identifier");  return identifier;}
-[1-9][0-9]*|0/[;|,|" "|\)|<|>|=|\!|\||&|\+|\-|\*|\/|\%|~|\]|\}|:|\n|\t|\^] 	{strcpy(curval,yytext); insertCT(yytext, "Number Constant"); return integer_constant;}
+[a-z|A-Z]([a-z|A-Z]|[0-9])*/\[ 	{strcpy(curid,yytext); insertST(yytext, "Array Identifier");  return array_identifier;}
+[1-9][0-9]*|0/[;|,|" "|\)|<|>|=|\!|\||&|\+|\-|\*|\/|\%|~|\]|\}|:|\n|\t|\^] 	{strcpy(curval,yytext); insertCT(yytext, "Number Constant"); yylval = atoi(yytext); return integer_constant;}
 ([0-9]*)\.([0-9]+)/[;|,|" "|\)|<|>|=|\!|\||&|\+|\-|\*|\/|\%|~|\n|\t|\^] 	{strcpy(curval,yytext); insertCT(yytext, "Floating Constant"); return float_constant;}
-[A-Za-z_][A-Za-z_0-9]* {strcpy(curid,yytext);insertST(yytext,"Identifier");  return identifier;}
+[A-Za-z_][A-Za-z_0-9]* {strcpy(curid,yytext); insertST(curid,"Identifier"); return identifier;}
 
 (.?) {
 		if(yytext[0]=='#')
