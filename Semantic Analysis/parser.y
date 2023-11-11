@@ -38,6 +38,7 @@
 	char getfirst(char*);
 	extern int params_count;
 	int call_params_count;
+	void append_dim(int);
 %}
 
 %nonassoc IF
@@ -126,7 +127,7 @@ identifier_array_type
 			| ;
 
 initilization_params
-			: integer_constant ']' identifier_array_type initilization {if($$ < 1) {printf("Wrong array size\n"); exit(0);} }
+			: integer_constant {append_dim($1);} ']' identifier_array_type initilization {if($$ < 1) {printf("Wrong array size\n"); exit(0);} }
 			| ']' identifier_array_type string_initilization;
 
 initilization

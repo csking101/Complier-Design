@@ -15,6 +15,7 @@ void main()
     char ch;//Character Datatype
     int x;
     int a[10][8];
+    float basdf[5][13];
     for (int i=0;i<10;i++){
         if(i<10){
             int y;
