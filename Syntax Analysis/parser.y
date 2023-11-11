@@ -1,12 +1,15 @@
 %{
 	void yyerror(char* s);
 	int yylex();
+
 	#include "stdio.h"
 	#include "stdlib.h"
 	#include "ctype.h"
 	#include "string.h"
+
 	void ins();
 	void insV();
+	
 	int flag=0;
 
 	extern char curid[20];

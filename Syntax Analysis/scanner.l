@@ -278,7 +278,7 @@ IN "include"
 "..."           { return SPREAD;}
 
 "const"		    { insertST(yytext, "Keyword");  return CONST;}
-"default"		    { insertST(yytext, "Keyword");  return DEFAULT;}
+"default"		{ insertST(yytext, "Keyword");  return DEFAULT;}
 "char"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword"); return CHAR;}
 "double"		{ strcpy(curtype,yytext); insertST(yytext, "Keyword"); return DOUBLE;}
 "else"			{ insertSTline(yytext, yylineno); insertST(yytext, "Keyword"); return ELSE;}
