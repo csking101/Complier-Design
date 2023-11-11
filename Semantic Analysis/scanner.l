@@ -411,8 +411,58 @@
 			{
 				continue;
 			}
+
+			// int first_occurrance = 0;
+			// int dup[1007];
+			// for (int i = 0;i < 1007;i++){
+			// 	dup[i] = -1;
+			// }
+
+
+			// for (int j = 0;j < 1007;j++){
+
+			// 	if(strcmp(ST[i].name,ST[j].name)==0) {				
+			// 		// if(ST[i].nesting_val == ST[j].nesting_val) //Remove if this thing doesn't work
+			// 		{
+			// 			first_occurrance = 1;
+			// 			int idx = 0;
+			// 			for (;idx<1007;idx++){
+			// 				if (dup[idx] == -1){
+			// 					dup[idx] = ST[j].lineno;
+			// 					break;
+			// 				}
+			// 				// printf("hello");
+			// 			}
+			// 		}
+			// 	}
+			// }
+			// char line_no_str[3000] = "";
+			// if (!first_occurrance){
+			// 	continue;
+			// } else {
+				
+			// 	for (int idx = 0;idx < 1007;idx++){
+			// 		if (dup[idx] == -1){
+			// 			break;
+			// 		}
+			// 		printf("hi");
+			// 		sprintf(line_no_str,"%s%d->",line_no_str,dup[idx]);
+			// 	}
+			// }
+
+			// printf("%10s | %15s | %10s | %10s | %10s | %15d | %10d |\n",ST[i].name, ST[i].class, ST[i].type, ST[i].value, line_no_str, ST[i].nesting_val, ST[i].params_count);
 			printf("%10s | %15s | %10s | %10s | %10d | %15d | %10d |\n",ST[i].name, ST[i].class, ST[i].type, ST[i].value, ST[i].lineno, ST[i].nesting_val, ST[i].params_count);
+
+
+
+			/*printf("%10s | %15s | %10s | %10s | ",ST[i].name, ST[i].class, ST[i].type, ST[i].value);
+            for (int j = 0;j < 100;j++){
+                if (ST[i].lineno[j] == -1) break;
+                printf("%d -> ",ST[i].lineno[j]);
+            }
+            printf("\n");*/
 		}
+							// printf("hello");
     }
 
 
@@ -457,6 +507,8 @@ IN "include"
 ("]"|":>") 		{ return(']'); }
 ":"				{ return(':'); }
 "."				{ return('.'); }
+"..."           { return SPREAD;}
+
 "const"		    { insertST(yytext, "Keyword");  return CONST;}
 "default"		{ insertST(yytext, "Keyword");  return DEFAULT;}
 "char"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return CHAR;}
@@ -481,6 +533,7 @@ IN "include"
 "break"			{ insertST(yytext, "Keyword");  return BREAK;}
 "switch"		{ insertST(yytext, "Keyword");  return SWITCH;}
 "case"			{ insertST(yytext, "Keyword");  return CASE;}
+"continue"			{ insertST(yytext, "Keyword");  return CONTINUE;}
 
 "int*"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return INTs;}
 "float*"		{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return FLOATs;}
@@ -561,8 +614,3 @@ IN "include"
 }
 
 %%
-
-int yywrap()
-{
-	return 1;
-}

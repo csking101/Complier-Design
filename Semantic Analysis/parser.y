@@ -49,10 +49,9 @@
 %token WHILE FOR DO 
 %token BREAK
 %token ENDIF
-%token SWITCH CASE DEFAULT SPREAD
+%token SWITCH CASE CONTINUE DEFAULT SPREAD
 %token AUTO STATIC REGISTER EXTERN VOLATILE INLINE
 %token PRINTF SCANF
-%expect 1
 
 %token identifier array_identifier func_identifier
 %token integer_constant string_constant float_constant character_constant
@@ -98,9 +97,18 @@ D
 declaration
 			: variable_declaration 
 			| function_declaration
+			| structure_definition
+            | enum_declaration;
 
 variable_declaration
 			: type_specifier variable_declaration_list ';' 
+			| storage_classes type_specifier variable_declaration_list ';'
+			| storage_classes CONST type_specifier variable_declaration_list ';'
+			| CONST type_specifier variable_declaration_list ';'
+			| structure_declaration ';';
+
+storage_classes
+            : AUTO | STATIC | REGISTER | EXTERN | VOLATILE
 
 variable_declaration_list
 			: variable_declaration_list ',' variable_declaration_identifier | variable_declaration_identifier;
@@ -118,8 +126,8 @@ identifier_array_type
 			| ;
 
 initilization_params
-			: integer_constant ']' initilization {if($$ < 1) {printf("Wrong array size\n"); exit(0);} }
-			| ']' string_initilization;
+			: integer_constant ']' identifier_array_type initilization {if($$ < 1) {printf("Wrong array size\n"); exit(0);} }
+			| ']' identifier_array_type string_initilization;
 
 initilization
 			: string_initilization
@@ -127,12 +135,15 @@ initilization
 			| ;
 
 type_specifier 
-			: INT | CHAR | FLOAT  | DOUBLE  
+			: INT | CHAR | FLOAT  | DOUBLE | star_specifier 
 			| LONG long_grammar 
 			| SHORT short_grammar
 			| UNSIGNED unsigned_grammar 
 			| SIGNED signed_grammar
 			| VOID  ;
+
+star_specifier
+			: INTs | CHARs | FLOATs | DOUBLEs ;
 
 unsigned_grammar 
 			: INT | LONG long_grammar | SHORT short_grammar | ;
@@ -145,6 +156,18 @@ long_grammar
 
 short_grammar 
 			: INT | ;
+
+structure_definition
+			: struct_or_union identifier { ins(); } '{' V1  '}' ';';
+
+V1 : variable_declaration V1 | ;
+
+structure_declaration 
+			: struct_or_union identifier variable_declaration_list;
+
+struct_or_union
+            : STRUCT
+            | UNION ;
 
 function_declaration
 			: function_declaration_type function_declaration_param_statement;
@@ -178,8 +201,30 @@ param_identifier_breakup
 statement 
 			: expression_statment | compound_statement 
 			| conditional_statements | iterative_statements 
-			| return_statement | break_statement 
-			| variable_declaration;
+			| return_statement | break_statement | continue_statement
+			| variable_declaration 
+            | switch_case 
+			| printf_scanf_statements;
+
+printf_scanf_statements
+			: printf_statement ';'
+			| scanf_statement ';' 
+			;
+
+printf_statement
+			: PRINTF '(' printf_parameters ')' ;
+
+scanf_statement
+			:  SCANF '(' scanf_parameters ')' ;
+
+printf_parameters
+			: printf_parameters ',' expression
+			| string_constant;
+
+scanf_parameters
+			: scanf_parameters ',' identifier
+			| scanf_parameters ',' amp_operator identifier
+			| string_constant;
 
 compound_statement 
 			: {current_nesting++;} '{'  statment_list  '}' {deletedata(current_nesting);current_nesting--;}  ;
@@ -200,9 +245,11 @@ conditional_statements_breakup
 			| ;
 
 iterative_statements 
-			: WHILE '(' simple_expression ')' {if($3!=1){printf("Condition checking is not of type int\n");exit(0);}} statement 
-			| FOR '(' expression ';' simple_expression ';' {if($5!=1){printf("Condition checking is not of type int\n");exit(0);}} expression ')' 
+			: WHILE '(' expression ')' {if($3!=1){printf("Condition checking is not of type int\n");exit(0);}} statement 
+			| FOR '(' variable_declaration_list ';' simple_expression ';' {if($5!=1){printf("Condition checking is not of type int\n");exit(0);}} expression ')' 
+			| FOR '(' type_specifier variable_declaration_list ';' simple_expression ';' {if($6!=1){printf("Condition checking is not of type int\n");exit(0);}} expression ')' 
 			| DO statement WHILE '(' simple_expression ')'{if($5!=1){printf("Condition checking is not of type int\n");exit(0);}} ';';
+
 return_statement 
 			: RETURN ';' {if(strcmp(currfunctype,"void")) {printf("Returning void of a non-void function\n"); exit(0);}}
 			| RETURN expression ';' { 	if(!strcmp(currfunctype, "void"))
@@ -219,6 +266,9 @@ return_statement
 
 break_statement 
 			: BREAK ';' ;
+
+continue_statement 
+			: CONTINUE ';' ;
 
 string_initilization
 			: assignment_operator string_constant {insV();} ;
@@ -274,7 +324,8 @@ expression
 			                                                       }
 			| mutable increment_operator 							{if($1 == 1) $$=1; else $$=-1;}
 			| mutable decrement_operator 							{if($1 == 1) $$=1; else $$=-1;}
-			| simple_expression {if($1 == 1) $$=1; else $$=-1;} ;
+			| simple_expression {if($1 == 1) $$=1; else $$=-1;}
+			;
 
 
 simple_expression 
@@ -335,7 +386,8 @@ mutable
 			              		$$ = 1;
 			              		else
 			              		$$ = -1;
-			              		};
+			              		}
+			| amp_operator identifier;
 
 immutable 
 			: '(' expression ')' {if($2==1) $$=1; else $$=-1;}
@@ -374,6 +426,34 @@ constant
 			| string_constant	{  insV(); $$=-1;} 
 			| float_constant	{  insV(); } 
 			| character_constant{  insV();$$=1; };
+
+enum_declaration
+            : ENUM identifier '{' enum_list '}' ';'
+            ;
+
+enum_list
+            : enumerator
+            | enum_list ',' enumerator ;
+
+enumerator
+            : identifier
+            | identifier assignment_operator integer_constant
+            ;
+
+switch_case
+            : SWITCH  '(' identifier ')' '{' case_list '}' ;
+
+case_list
+            : case_entry BREAK ';'
+            | case_list case_entry BREAK ';'
+            ;
+
+case_entry  
+            : CASE constant ':' statement
+            | CASE constant SPREAD constant':' statement
+            | DEFAULT ':' statement
+            |
+            ;
 
 %%
 
