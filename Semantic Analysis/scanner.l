@@ -164,7 +164,6 @@
 
 	void insertSTvalue(char *str1, char *str2)
 	{
-		// printf("%s %s\n", str1, str2);
 		for(int i = 0 ; i < 1007 ; i++)
 		{
 			if(strcmp(ST[i].name,str1)==0)// && ST[i].nesting_val == current_nesting)
@@ -439,25 +438,20 @@
 		// char input[] = "id 1 2 3 \n id 4 5 6 \n id 7 8 9 \n";
 
 		char *input = array_dim_str;
-		char id[100];  // Assuming the ID can be at most 20 characters long
-		char numbers[100];  // Assuming the numbers can be at most 100 characters long
-		
-		// Use sscanf to parse each line
+		char id[100];  
+		char numbers[100];
 		int offset = 0;
+		
 		while (sscanf(input + offset, "%s %[^\n]s", id, numbers) == 2) {
-			// printf("ID: %s\nNumbers: %s\n", id, numbers);
-			offset += snprintf(NULL, 0, "%s %s", id, numbers) + 1; // Move the offset to the next line
+			offset += snprintf(NULL, 0, "%s %s", id, numbers) + 1;
 			for(int i = 0 ; i < 1007 ; i++)
-		{
-			if(strcmp(ST[i].name,id)==0)// && ST[i].nesting_val == current_nesting)
 			{
-				strcpy(ST[i].value,numbers);
+				if(strcmp(ST[i].name,id)==0)// && ST[i].nesting_val == current_nesting)
+				{
+					strcpy(ST[i].value,numbers);
+				}
 			}
 		}
-		}
-
-			
-		// insertSTvalue(id, numbers);
 		
 	}
 
