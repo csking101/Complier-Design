@@ -115,8 +115,8 @@ variable_declaration_list
 			: variable_declaration_list ',' variable_declaration_identifier | variable_declaration_identifier;
 
 variable_declaration_identifier 
-			: identifier {if(duplicate(curid)){printf("Duplicate\n");exit(0);}insertSTnest(curid,current_nesting); ins();  } vdi   
-			  | array_identifier {if(duplicate(curid)){printf("Duplicate\n");exit(0);}insertSTnest(curid,current_nesting); ins();  } vdi;
+			: identifier {if(duplicate(curid)){printf("Duplicate\n");} ins();  } vdi   
+			  | array_identifier {if(duplicate(curid)){printf("Duplicate\n");} ins();  } vdi;
 			
 			
 
@@ -193,7 +193,7 @@ parameters_identifier_list_breakup
 			| ;
 
 param_identifier 
-			: identifier { ins();insertSTnest(curid,1); params_count++; } param_identifier_breakup;
+			: identifier { ins(); params_count++; } param_identifier_breakup;
 
 param_identifier_breakup
 			: '[' ']'
@@ -228,7 +228,7 @@ scanf_parameters
 			| string_constant;
 
 compound_statement 
-			: {current_nesting++;} '{'  statment_list  '}' {deletedata(current_nesting);current_nesting--;}  ;
+			: {current_nesting++;} '{'  statment_list  '}' {printST(); deletedata(current_nesting);current_nesting--;}  ;
 
 statment_list 
 			: statement statment_list 
