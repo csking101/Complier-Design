@@ -1,4 +1,5 @@
 #include<stdio.h>
+// type mismatch
 int main()
 {
     int a = "hi";

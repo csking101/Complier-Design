@@ -1,18 +1,15 @@
 #include<stdio.h>
 
-//correct test with simple func declaration and while loop
-
 int myfunc(int b)
 {
     int x;
     return x;
 }
 
-
 void main()
 {
     int n;
-    char ch;//Character Datatype
+    char ch;
     int x;
     int a[10][8];
     float basdf[5][13];

@@ -1,7 +1,6 @@
 %{
 	#include <stdio.h>
 	#include <string.h>
-	#include <stdlib.h>
 	#include "y.tab.h"
 
 	struct symboltable
@@ -10,7 +9,6 @@
 		char class[100];
 		char type[100];
 		char value[100];
-		char dimension[100];
 		int nesting_val;
 		int lineno;
 		int length;
@@ -29,6 +27,7 @@
 	char line_dec_type = 'n';
 	extern int yylval;
 
+	// int a = 5;
 	void set_line_dec_type(char type){
 		line_dec_type = type;
 	}
@@ -36,13 +35,6 @@
 		return (line_dec_type == type_to_check);
 	}
 
-	char array_dim_str[10000] = "";
-
-	void append_dim(int* val_to_append){
-		char temp[1000];
-		sprintf(temp," %d",val_to_append);
-		strcat(array_dim_str,temp);
-	}
 
 	int hash(char *str)
 	{
@@ -134,7 +126,7 @@
 				strcpy(ST[value].name,str1);
 				strcpy(ST[value].class,str2);
 				ST[value].length = strlen(str1);
-				ST[value].nesting_val = current_nesting;
+				ST[value].nesting_val = 9999;
 				ST[value].params_count = -1;
 				insertSTline(str1,yylineno);
 				return;
@@ -154,7 +146,7 @@
 			strcpy(ST[pos].name,str1);
 			strcpy(ST[pos].class,str2);
 			ST[pos].length = strlen(str1);
-			ST[pos].nesting_val = current_nesting;
+			ST[pos].nesting_val = 9999;
 			ST[pos].params_count = -1;
 		}
 	}
@@ -174,12 +166,11 @@
 	{
 		for(int i = 0 ; i < 1007 ; i++)
 		{
-			if(strcmp(ST[i].name,str1)==0)// && ST[i].nesting_val == current_nesting)
+			if(strcmp(ST[i].name,str1)==0 && ST[i].nesting_val == current_nesting)
 			{
 				strcpy(ST[i].value,str2);
 			}
 		}
-		printf("\n");
 	}
 
 
@@ -291,7 +282,7 @@
 		{
 			if(ST[i].nesting_val == nesting)
 			{
-				ST[i].length = 0 ;
+				ST[i].nesting_val = 99999;
 			}
 		}
 
@@ -416,58 +407,8 @@
 		
 	}
 
-	
-
-	void process_array_dimensions(){
-		// char* cur_array_str = strtok(array_dim_str,"\n");
-		// while (cur_array_str != NULL){ // <array name> dim1 dim2
-		// 	char array_name[1000] = "";
-		// 	char value[100];
-		// 	int index = 0;
-
-		// 	while(index < strlen(cur_array_str)){
-		// 		if(cur_array_str[index] == ' ') break;
-		// 		strcat(array_name, cur_array_str[index]);
-		// 		index++;
-		// 	}
-
-		// 	while(index < strlen(cur_array_str)){
-		// 		strcat(value, cur_array_str[index]);
-		// 		index++;
-		// 	}
-			
-		// 	printf("Array name is %s\n",array_name);
-			
-		// 	insertSTvalue(array_name, value);
-
-		// 	cur_array_str = strtok(NULL,"\n");
-		// }
-
-		// char input[] = "id 1 2 3 \n id 4 5 6 \n id 7 8 9 \n";
-
-		char *input = array_dim_str;
-		char id[100];  
-		char numbers[100];
-		int offset = 0;
-		
-		while (sscanf(input + offset, "%s %[^\n]s", id, numbers) == 2) {
-			offset += snprintf(NULL, 0, "%s %s", id, numbers) + 1;
-			for(int i = 0 ; i < 1007 ; i++)
-			{
-				if(strcmp(ST[i].name,id)==0)// && ST[i].nesting_val == current_nesting)
-				{
-					strcpy(ST[i].value,numbers);
-				}
-			}
-		}
-		
-	}
-
 	void printST()
 	{
-		process_array_dimensions();
-
-
 		printf("%10s | %15s | %10s | %10s | %10s | %15s | %10s |\n","symbol name", "Class", "Type","Value", "Line No.", "Nesting Count", "Count of Params");
 		for(int i=0;i<100;i++) {
 			printf("_");
@@ -519,11 +460,9 @@
 			// }
 
 			// printf("%10s | %15s | %10s | %10s | %10s | %15d | %10d |\n",ST[i].name, ST[i].class, ST[i].type, ST[i].value, line_no_str, ST[i].nesting_val, ST[i].params_count);
-			if(ST[i].params_count == -1){
-				printf("%10s | %15s | %10s | %10s | %10d | %15d | %10d |\n",ST[i].name, ST[i].class, ST[i].type, ST[i].value, ST[i].lineno, ST[i].nesting_val, 0);
-			} else {
-				printf("%10s | %15s | %10s | %10s | %10d | %15d | %10d |\n",ST[i].name, ST[i].class, ST[i].type, ST[i].value, ST[i].lineno, ST[i].nesting_val, ST[i].params_count);
-			}
+			printf("%10s | %15s | %10s | %10s | %10d | %15d | %10d |\n",ST[i].name, ST[i].class, ST[i].type, ST[i].value, ST[i].lineno, ST[i].nesting_val, ST[i].params_count);
+
+
 
 			/*printf("%10s | %15s | %10s | %10s | ",ST[i].name, ST[i].class, ST[i].type, ST[i].value);
             for (int j = 0;j < 100;j++){
@@ -550,8 +489,6 @@
 
 			printf("%10s | %15s\n",CT[i].name, CT[i].type);
 		}
-
-		// printf("%s\n",array_dim_str);
 	}
 	char curid[20];
 	char curtype[20];
@@ -564,10 +501,10 @@ IN "include"
 
 %%
 \n 	{yylineno++;}
-([#][" "]*({IN})[ ]*([<]?)([A-Za-z]+)[.]?([A-Za-z]*)([>]?))/["\n"|\/|" "|"\t"]	{ }
-([#][" "]*({DE})[" "]*([A-Za-z]+)(" ")*[0-9]+)/["\n"|\/|" "|"\t"]				{ } 
+([#][" "]({IN})[ ]([<]?)([A-Za-z]+)[.]?([A-Za-z]*)([>]?))/["\n"|\/|" "|"\t"]	{ }
+([#][" "]({DE})[" "]([A-Za-z]+)(" ")*[0-9]+)/["\n"|\/|" "|"\t"]				{ } 
 \/\/(.*)																		{ }
-\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/										{ }
+\/\([^]|[\r\n]|(\+([^/]|[\r\n])))\+\/										{ }
 [ \n\t] ;
 ";"				{ return(';'); }
 ","				{ return(','); }
@@ -659,9 +596,9 @@ IN "include"
 
 \"[^\n]*\"/[;|,|\)] 			{strcpy(curval,yytext); insertCT(yytext,"String Constant"); return string_constant;}
 \'[A-Z|a-z]\'/[;|,|\)|:] 		{strcpy(curval,yytext); insertCT(yytext,"Character Constant"); return character_constant;}
-[a-z|A-Z]([a-z|A-Z]|[0-9])*/\[ 	{strcpy(curid,yytext); insertST(yytext, "Array Identifier"); strcat(array_dim_str,"\n");strcat(array_dim_str,yytext); return array_identifier;}
-[1-9][0-9]*|0/[;|,|" "|\)|<|>|=|\!|\||&|\+|\-|\*|\/|\%|~|\]|\}|:|\n|\t|\^] 	{strcpy(curval,yytext); insertCT(yytext, "Number Constant"); yylval = atoi(yytext); return integer_constant;}
-([0-9]*)\.([0-9]+)/[;|,|" "|\)|<|>|=|\!|\||&|\+|\-|\*|\/|\%|~|\n|\t|\^] 	{strcpy(curval,yytext); insertCT(yytext, "Floating Constant"); return float_constant;}
+[a-z|A-Z]([a-z|A-Z]|[0-9])*/\[ 	{strcpy(curid,yytext); insertST(yytext, "Array Identifier");  return array_identifier;}
+[1-9][0-9]|0/[;|,|" "|\)|<|>|=|\!|\||&|\+|\-|\|\/|\%|~|\]|\}|:|\n|\t|\^] 	{strcpy(curval,yytext); insertCT(yytext, "Number Constant"); yylval = atoi(yytext); return integer_constant;}
+([0-9])\.([0-9]+)/[;|,|" "|\)|<|>|=|\!|\||&|\+|\-|\|\/|\%|~|\n|\t|\^] 	{strcpy(curval,yytext); insertCT(yytext, "Floating Constant"); return float_constant;}
 [A-Za-z_][A-Za-z_0-9]* {strcpy(curid,yytext); insertST(curid,"Identifier"); return identifier;}
 
 (.?) {

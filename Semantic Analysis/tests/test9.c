@@ -21,7 +21,7 @@ int main()
     signed short z;
     int w;
     a = 23;
-    a=20;
+    a = 20;
     b = 15;
     int c = a + b;
     printf("%d",c);

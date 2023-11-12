@@ -14,12 +14,10 @@ struct abc
 int main()
 {
     struct abc A;
-    // A.a = 2;
     const int num = 2;
-    int num2 = square(num);
-
-    printf("Square of %d is %d", num, num2);
-    scanf("Square of %d is %d", &num, &num2);
+    int x;
+    printf("Square of %d is %d", num, square(num));
+    scanf("%d", &x);
 
     return 0;
 }

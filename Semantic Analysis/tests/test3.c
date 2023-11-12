@@ -3,11 +3,9 @@
 int main()
 {
     char s[10] = "Welcome!!";
-    // char s[] = "Welcome!!";
     int a[2] = {1, 2};
     char S[20];
 
-    int* p = &a;
     if (s[0] == 'W')
     {
         if (s[1] == 'e')
