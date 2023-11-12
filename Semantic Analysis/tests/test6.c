@@ -1,8 +1,8 @@
 #include<stdio.h>
 int main()
 {
-    int a,b;
-    int c=a+b;
+    int a = "hi";
+
     for(int i = 0; i < 9; i++){
         printf("Hello");
     }

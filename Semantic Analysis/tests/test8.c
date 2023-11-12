@@ -3,7 +3,9 @@
 int main()
 {
 // switch variable
-	int var;
+	int var = 5;
+	
+
 // switch statement
 	switch (var) {
 		case 1:
