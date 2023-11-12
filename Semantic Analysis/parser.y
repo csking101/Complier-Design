@@ -17,6 +17,7 @@
 	extern char curval[20];
 
 	extern int current_nesting;
+	extern char line_dec_type;
 
 	void deletedata (int );
 	int checkscope(char*);
@@ -36,6 +37,8 @@
 	void insertSTF(char*);
 	char gettype(char*,int);
 	char getfirst(char*);
+	void set_line_dec_type(char);
+	int check_line_dec_type(char);
 	extern int params_count;
 	int call_params_count;
 %}
@@ -101,10 +104,10 @@ declaration
             | enum_declaration;
 
 variable_declaration
-			: type_specifier variable_declaration_list ';' 
-			| storage_classes type_specifier variable_declaration_list ';'
-			| storage_classes CONST type_specifier variable_declaration_list ';'
-			| CONST type_specifier variable_declaration_list ';'
+			: type_specifier variable_declaration_list ';' {set_line_dec_type('n');}
+			| storage_classes type_specifier variable_declaration_list ';' {set_line_dec_type('n');}
+			| storage_classes CONST type_specifier variable_declaration_list ';' {set_line_dec_type('n');}
+			| CONST type_specifier variable_declaration_list ';' {set_line_dec_type('n');}
 			| structure_declaration ';';
 
 storage_classes
@@ -114,19 +117,27 @@ variable_declaration_list
 			: variable_declaration_list ',' variable_declaration_identifier | variable_declaration_identifier;
 
 variable_declaration_identifier 
-			: identifier {if(duplicate(curid)){printf("Duplicate\n");exit(0);}insertSTnest(curid,current_nesting); ins();  } vdi   
-			  | array_identifier {if(duplicate(curid)){printf("Duplicate\n");exit(0);}insertSTnest(curid,current_nesting); ins();  } vdi;
+			: identifier {if( (duplicate(curid)) && !(check_line_dec_type('n')) )
+							{printf("Duplicate\n");exit(0);}
+							else {
+							insertSTnest(curid,current_nesting); ins();  
+						}} vdi   
+			  .| array_identifier {if( (duplicate(curid)) && !(check_line_dec_type('n')) )
+							{printf("Duplicate\n");exit(0);}
+							else {
+							insertSTnest(curid,current_nesting); ins();  
+						}} vdi;
 			
 			
 
-vdi : identifier_array_type | assignment_operator simple_expression  ; 
+vdi : identifier_array_type | assignment_operator simple_expression {if (check_line_dec_type('i') && $2 == 1){printf("Types match");} else printf("Types don't match\n"); } ; 
 
 identifier_array_type
 			: '[' initilization_params
 			| ;
 
 initilization_params
-			: integer_constant ']' identifier_array_type initilization {if($$ < 1) {printf("Wrong array size\n"); exit(0);} }
+			: integer_constant ']' identifier_array_type initilization {if($$ < 1) {printf("Wrong array size\n"); } }
 			| ']' identifier_array_type string_initilization;
 
 initilization
@@ -135,7 +146,11 @@ initilization
 			| ;
 
 type_specifier 
-			: INT | CHAR | FLOAT  | DOUBLE | star_specifier 
+			: INT {set_line_dec_type('i');} 
+			| CHAR {set_line_dec_type('i');} 
+			| FLOAT {set_line_dec_type('i');} 
+			| DOUBLE {set_line_dec_type('i');} 
+			| star_specifier 
 			| LONG long_grammar 
 			| SHORT short_grammar
 			| UNSIGNED unsigned_grammar 
@@ -324,7 +339,7 @@ expression
 			                                                       }
 			| mutable increment_operator 							{if($1 == 1) $$=1; else $$=-1;}
 			| mutable decrement_operator 							{if($1 == 1) $$=1; else $$=-1;}
-			| simple_expression {if($1 == 1) $$=1; else $$=-1;}
+			| simple_expression 									{if($1 == 1) $$=1; else $$=-1;}
 			;
 
 
@@ -424,7 +439,7 @@ A
 constant 
 			: integer_constant 	{  insV(); $$=1; } 
 			| string_constant	{  insV(); $$=-1;} 
-			| float_constant	{  insV(); } 
+			| float_constant	{  insV(); $$=1;} 
 			| character_constant{  insV();$$=1; };
 
 enum_declaration

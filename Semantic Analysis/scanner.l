@@ -24,7 +24,16 @@
 
 	int current_nesting = 0;
 	int params_count = 0;
+	char line_dec_type = 'n';
 	extern int yylval;
+
+	// int a = 5;
+	void set_line_dec_type(char type){
+		line_dec_type = type;
+	}
+	int check_line_dec_type(char type_to_check){
+		return (line_dec_type == type_to_check);
+	}
 
 
 	int hash(char *str)
