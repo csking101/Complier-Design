@@ -144,15 +144,17 @@ type_specifier
 			| CHAR {set_line_dec_type('i');}
 			| FLOAT {set_line_dec_type('i');}
 			| DOUBLE {set_line_dec_type('i');}
-			| star_specifier 
+			| star_specifier {set_line_dec_type('i');}
 			| LONG long_grammar 
 			| SHORT short_grammar
 			| UNSIGNED unsigned_grammar 
 			| SIGNED signed_grammar
-			| VOID  ;
+			| VOID;
 
 star_specifier
-			: INTs | CHARs | FLOATs | DOUBLEs ;
+			: INTs | CHARs | FLOATs | DOUBLEs | multiple_stars;
+
+multiple_stars : star_specifier multiplication_operator;
 
 unsigned_grammar 
 			: INT | LONG long_grammar | SHORT short_grammar | ;
@@ -396,7 +398,7 @@ mutable
 			              		else
 			              		$$ = -1;
 			              		}
-			| amp_operator identifier;
+			| amp_operator identifier {$$ = 1;};
 
 immutable 
 			: '(' expression ')' {if($2==1) $$=1; else $$=-1;}

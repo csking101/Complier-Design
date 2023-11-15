@@ -605,12 +605,12 @@ IN "include"
 "break"			{ insertST(yytext, "Keyword");  return BREAK;}
 "switch"		{ insertST(yytext, "Keyword");  return SWITCH;}
 "case"			{ insertST(yytext, "Keyword");  return CASE;}
-"continue"			{ insertST(yytext, "Keyword");  return CONTINUE;}
+"continue"		{ insertST(yytext, "Keyword");  return CONTINUE;}
 
-"int*"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return INTs;}
-"float*"		{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return FLOATs;}
-"char*"			{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return CHARs;}
-"double*"		{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return DOUBLEs;}
+"int"\s*\*+		{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return INTs;}
+"float"\s*\*+	{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return FLOATs;}
+"char"\s*\*+ 	{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return CHARs;}
+"double"\s*\*+	{ strcpy(curtype,yytext); insertST(yytext, "Keyword");return DOUBLEs;}
 
 "auto"          { insertST(yytext, "Keyword"); return AUTO; }
 "static"        { insertST(yytext, "Keyword"); return STATIC; }
